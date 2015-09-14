@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;cn.hadoop.Mapper&apos; to &apos;MaxTemperatureMapper&apos;&#x0A;- Original project: &apos;MaxTemperature&apos;&#x0A;- Original element: &apos;cn.hadoop.Mapper&apos;&#x0A;- Renamed element: &apos;cn.hadoop.MaxTemperatureMapper&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;Mapper&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;cn.hadoop{Mapper.java[Mapper" matchStrategy="1" name="MaxTemperatureMapper" qualified="false" references="true" similarDeclarations="false" stamp="1441873323533" textual="false" version="1.0"/>
+</session>
