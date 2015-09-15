@@ -5,6 +5,7 @@
 		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
 		<item value="false" key="WizardProjectsImportPage.STORE_NESTED_PROJECTS"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="/Users/mumutongxue/Documents/workspace/hadoop"/>
 			<item value="/Users/mumutongxue/Downloads/青羊教育云计算服务平台/代码版本/EPFQ"/>
 		</list>
 		<list key="WizardProjectsImportPage.STORE_ARCHIVES">
