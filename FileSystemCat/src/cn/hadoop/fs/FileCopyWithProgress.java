@@ -16,7 +16,7 @@ import org.apache.hadoop.util.Progressable;
 public class FileCopyWithProgress {
 	public static void main(String[] args) throws Exception {
 		String localStr = "/Users/mumutongxue/python/test.csv";
-		String dst = "hdfs://172.16.85.128:50070/";
+		String dst = "hdfs://172.16.85.128/sample";
 		InputStream in = new BufferedInputStream(new FileInputStream(localStr));
 		
 		Configuration conf = new Configuration();

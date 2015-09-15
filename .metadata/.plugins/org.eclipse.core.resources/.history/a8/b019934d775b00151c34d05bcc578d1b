@@ -1,0 +1,19 @@
+package cn.hadoop.fs;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.junit.Before;
+
+public class ShowFileStatusTest {
+
+	private MiniDFSCluster cluster;
+	private FileSystem fs;
+	@Before
+	public void setUp() {
+		Configuration conf = new Configuration();
+		if(System.getProperty("test.build.data") == null){
+			System.setProperty("test.build.data", "/tmp");
+		}
+		cluster = new MiniDFSCluster(conf, 1, true, null)
+	}
+}

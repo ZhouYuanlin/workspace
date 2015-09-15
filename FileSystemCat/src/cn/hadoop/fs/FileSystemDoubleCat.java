@@ -12,7 +12,7 @@ import org.apache.hadoop.io.IOUtils;
 public class FileSystemDoubleCat {
 
 	public static void main(String[] args) throws Exception {
-		String uri = "hdfs://172.16.85.128:8020/sample.txt";
+		String uri = "hdfs://172.16.85.128/sample";
 		Configuration conf = new Configuration();
 		FileSystem fs = FileSystem.get(URI.create(uri), conf);
 		FSDataInputStream in = null;
