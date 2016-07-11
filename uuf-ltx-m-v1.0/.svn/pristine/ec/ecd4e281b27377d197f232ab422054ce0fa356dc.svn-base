@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!DOCTYPE urlrewrite
+        PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite3.2.dtd">
+    <urlrewrite>
+        <rule>
+           <from>/sjm/xsc/index.html</from>
+           <to>/pub/xsc</to>
+        </rule>
+        <rule>
+           <from>/sjm/xsc/list_(.*).html</from>
+           <to>/pub/xsc/list?id=$1</to>
+        </rule>
+        <rule>
+           <from>/sjm/xsc/list/([0-9]+)/([0-9]+).html*</from>
+           <to>/pub/xsc/list?id=$1&amp;pageNumber=$2</to>
+        </rule>
+        <rule>
+           <from>/sjm/xsc/article_(.*).html</from>
+           <to>/pub/xsc/detail?id=$1</to>
+        </rule>
+    </urlrewrite>

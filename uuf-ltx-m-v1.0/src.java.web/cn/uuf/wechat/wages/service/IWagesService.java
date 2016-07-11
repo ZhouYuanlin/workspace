@@ -1,0 +1,23 @@
+package cn.uuf.wechat.wages.service;
+
+import java.util.List;
+
+import cn.uuf.domain.Retirewages;
+import cn.uuf.stu.framework.common.Page;
+import cn.uuf.stu.framework.common.Pageable;
+import cn.uuf.stu.framework.service.IBaseService;
+
+public interface IWagesService extends IBaseService<Retirewages, Long> {
+	/**
+	 * 查询所有
+	 */
+	List<Retirewages> getAll();
+	
+	/**
+	 * 分页查询
+	 * @param activother
+	 * @param pageable
+	 * @return
+	 */
+	Page<Retirewages> queryList(Retirewages wages, Pageable pageable);
+}

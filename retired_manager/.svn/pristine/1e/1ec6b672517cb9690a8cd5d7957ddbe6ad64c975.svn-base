@@ -1,0 +1,280 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.uufocus.com/taglib" prefix="s"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<html>
+	<body>
+		<jsp:include page="tree.jsp"/>
+		<div class="page-content-wrapper">
+		<div class="page-content">
+			<div class="row">
+				<div class="col-md-12">
+					<ul class="page-breadcrumb breadcrumb">
+						<li>
+							<i class="fa fa-home"></i>
+							<a href="${request.contextPath}/">
+							首页 </a>
+							<i class="fa fa-angle-right"></i>
+						</li>
+						<li> 
+							<a href="${request.contextPath}/">
+							菜单管理 </a>
+							<i class="fa fa-angle-right"></i>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 clearfix">
+                <div class="operation-btn pull-right">
+                	<!-- a href="javascript:;;" class="btn blue" onclick="doCreate()"><i class="fa fa-plus"></i> 新增</a> 
+                    <a href="javascript:;;" class="btn blue" onclick="doEdit()"><i class="fa fa-pencil-square-o"></i> 修改</a>
+					<a href="javascript:;;" class="btn blue" onclick="doDel()"><i class="fa fa-times"></i> 删除</a-->
+					<jsp:include page="${request.contextPath}/defaults/layouts/_menu.jsp"/>
+                </div>
+              </div>
+              </div>
+			  <div class="row">
+					<div class="col-md-12">
+			        <div class="portlet box grey">
+									<div class="portlet-title">
+										<div class="caption">
+											基本信息
+										</div>
+										<div class="tools">
+											<a href="javascript:;" class="collapse">
+											</a>
+										</div>
+									</div>
+									<div class="portlet-body form">
+										<form id="frm" action="<c:url value='${request.contextPath}/resource/update'/>" class="form-horizontal" method="post">
+											<input type="hidden" name="id" value="${rs.id}"/>
+											<input type="hidden" value="${rs.id}" id="rsId"/>
+											<div class="form-body">
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group">
+															<label class="control-label"><i style="color:red;margin-right:5px;">*</i>编码：</label>
+															<div class="controls">
+																<input type="text" id="code" name="code" value="${rs.code}" class="form-control col-md-12">
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+                                                        <div class="form-group">
+															<label class="control-label"><i style="color:red;margin-right:5px;">*</i>菜单名称：</label>
+															<div class="controls">
+																<input type="text" id="name" name="name" value="${rs.name}" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+                                                        <div class="form-group">
+															<label class="control-label">是否为按钮：</label>
+															<div class="controls">
+																<select name="ifleaf" class="form-control col-md-12">
+																	<option value="false" <c:if test="${rs.ifleaf==false}">selected</c:if> >否</option>
+                            										<option value="true" <c:if test="${rs.ifleaf==true}">selected</c:if>>是</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group">
+															<label class="control-label">状态：</label>
+															<div class="controls">
+																<select name="status" class="form-control col-md-12">
+																	<option value="启用" <c:if test="${rs.status == '启用'}">selected</c:if>>启用</option>
+																	<option value="停用" <c:if test="${rs.status == '停用'}">selected</c:if>>停用</option>
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+                                                        <div class="form-group">
+															<label class="control-label">父接点：</label>
+															<div class="controls">
+																<select id="parentId" name="parentId" class="form-control col-md-12">
+																	<option value="">---请选择---</option>
+																	<c:forEach items="${list}" var="item">
+																		<c:if test="${empty item.parent}">
+																			<option value="${item.id}" <c:if test="${item.id == rs.parent.id}">selected</c:if>>${item.name}</option>
+																			<c:forEach items="${item.children}" var="chi" varStatus="c">
+																				<option value="${chi.id}" <c:if test="${chi.id == rs.parent.id}">selected</c:if>>&nbsp;&nbsp;${c.index+1}、${chi.name}</option>
+																			</c:forEach>
+																		</c:if>
+																	</c:forEach>
+																</select>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+                                                        <div class="form-group">
+															<label class="control-label">排序：</label>
+															<div class="controls">
+																<input type="text" name="sort" value="${rs.sort}" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group">
+															<label class="control-label">别名：</label>
+															<div class="controls">
+																<input type="text" id="aalias" name="aalias" value="${rs.aalias}" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+                                                        <div class="form-group">
+															<label class="control-label">背景样式：</label>
+															<div class="controls">
+																<input type="text" id="aclass" name="aclass" value="${rs.aclass == '' ? 'btn blue' : rs.aclass}" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+                                                        <div class="form-group">
+															<label class="control-label">图片样式：</label>
+															<div class="controls">
+																<input type="text" id="iclass" name="iclass" value="${rs.iclass}" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group">
+															<label class="control-label">href方法：</label>
+															<div class="controls">
+																<input type="text" id="ahref" name="ahref" value="javascript:void(0)" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+                                                        <div class="form-group">
+															<label class="control-label">调用方法：</label>
+															<div class="controls">
+																<input type="text" id="domethod" name="domethod" value="${rs.domethod}" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+                                                        <div class="form-group">
+															<label class="control-label">role属性：</label>
+															<div class="controls">
+																<input type="text" id="arole" name="arole" value="${rs.arole}" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-4">
+														<div class="form-group">
+															<label class="control-label">data_toggle属性：</label>
+															<div class="controls">
+																<input type="text" id="data_toggle" name="data_toggle" value="${rs.data_toggle}" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+                                                        <div class="form-group">
+															<label class="control-label">data_formid属性：</label>
+															<div class="controls">
+																<input type="text" id="data_formid" name="data_formid" value="${rs.data_formid}" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-4">
+                                                        <div class="form-group">
+															<label class="control-label">data_action属性：</label>
+															<div class="controls">
+																<input type="text" id="data_action" name="data_action" value="${rs.data_action}" class="form-control col-md-12"/>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label class="control-label"><i style="color:red;margin-right:5px;">*</i>可访问角色：</label>
+															<div class="controls">
+																<c:forEach items="${roList}" var="item" varStatus="c">
+																 <label class="checkbox inline">
+												      			<input type="checkbox" name="roleId" class="roleClass" value="${item.id}" <c:forEach items="${rs.roles}" var="chi"><c:if test="${item.id == chi.id}">checked</c:if></c:forEach>/>${item.name}
+												      			</label>
+												      			</c:forEach>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label class="control-label">访问路径：</label>
+															<div class="controls">
+																<input type="text" name="action" value="${rs.action}" class="form-control col-md-12">
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label class="control-label">图片地址：</label>
+															<div class="controls">
+																<input type="text" id="imageUrl" name="imageUrl" value="${rs.imageUrl}" class="form-control col-md-12">
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="form-actions fluid">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="col-md-offset-5">
+															<button type="submit" class="btn blue mgr10 wzbtn" onclick="return doSave()"> 提交 </button> 
+														</div>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>  
+					</div>
+			  </div>
+			</div>
+		</div>
+		<script>
+			//增加
+			function doCreate(){
+					window.location.href="${request.contextPath}/resource/create?id="+$("#rsId").val();
+			}
+			
+		//删除
+			function doDel(){
+				if(confirm('确定要删除吗？')){
+					window.location.href= "${request.contextPath}/resource/delete?id="+$("#rsId").val();
+				}else{
+					return false;
+				}
+			}
+			function doSave(){  //jquery获取复选框值     
+			 var chk_value =[];    
+			  $('input[name="roleId"]:checked').each(function(){    
+			   chk_value.push($(this).val());    
+			  });    
+			  if(chk_value.length==0){
+			  	alert("你还没有选择访问角色！");
+			  	return false;
+			  }else{
+			  return true;
+			  }
+			}
+		</script>
+	</body>
+</html>

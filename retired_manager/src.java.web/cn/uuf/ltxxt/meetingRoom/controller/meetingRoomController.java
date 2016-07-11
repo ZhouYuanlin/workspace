@@ -1,0 +1,199 @@
+package cn.uuf.ltxxt.meetingRoom.controller;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import cn.uuf.contants.Constants;
+import cn.uuf.domain.Account;
+import cn.uuf.domain.CodeDwb;
+import cn.uuf.domain.Role;
+import cn.uuf.domain.meetingroom.MeetingApply;
+import cn.uuf.domain.meetingroom.MeetingRoom;
+import cn.uuf.ltxxt.login.controller.BaseController;
+import cn.uuf.ltxxt.meetingRoom.service.MeetingApplyService;
+import cn.uuf.ltxxt.meetingRoom.service.MeetingRoomService;
+import cn.uuf.ltxxt.system.permission.service.AccountService;
+import cn.uuf.ltxxt.system.permission.service.RoleService;
+import cn.uuf.util.Paginate;
+
+/**
+ * 会议室管理
+ * @author ll
+ *
+ */
+@Controller
+@RequestMapping("/meetingRoom")
+public class meetingRoomController extends BaseController{
+	private final String LIST_ACTION = "redirect:/meetingRoom";
+	private final String MEETING_MANAGER = "会议室管理员";
+	
+	@Resource
+	private MeetingRoomService meetingRoomservice;
+	
+	@Resource
+	private MeetingApplyService meetingApplyService;
+	
+	@Resource
+	private RoleService roleService;
+	
+	@Resource
+	private AccountService accountService;
+	
+	@RequestMapping
+	public ModelAndView index(@RequestParam(defaultValue="1") Integer page,MeetingRoom m){
+		ModelAndView mav = new ModelAndView("meeting/meetingRoom/list");
+		int s = (page - 1) * size;
+		Long count = meetingRoomservice.getCount(m);
+		List<MeetingRoom> list = meetingRoomservice.queryList(m, s, size);
+		paginate = new Paginate(list, count, size, page);
+		mav.addObject("paginate", paginate);
+		mav.addObject("list", list);
+		mav.addObject("meeting",m);
+		getCodeInf(mav);
+		return mav;
+	}
+	/**
+	 * 查看会议室详情
+	 * @param id
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequestMapping("{ajaxdetail:ajaxdetail;*.?}")
+	public ModelAndView detail(Long id,RedirectAttributes redirectAttributes){
+		ModelAndView mav = new ModelAndView("meeting/meetingRoom/detail");
+		try{
+			MeetingRoom mm = meetingRoomservice.getById(id);
+			mav.addObject("meeting", mm);
+		}catch(Exception e){
+			e.printStackTrace();
+			redirectAttributes.addFlashAttribute(Constants.MESSAGE_NAME,"未查询到活动信息");
+			return new ModelAndView(LIST_ACTION);
+		}
+		return mav;
+	}
+	 @RequestMapping("/create")
+     public ModelAndView create(){
+		 ModelAndView mav = new ModelAndView("meeting/meetingRoom/create");
+			this.getCodeInf(mav);
+			//得到会议室管理员
+			try {
+			  Object[] obj = null;
+			  List<Account> alist=new ArrayList<Account>();
+			  Role  role=roleService.queryByName(MEETING_MANAGER);
+			  String sql="SELECT * from UF_ACCOUNT_ROLES where ROLE_ID="+role.getId();
+			  List roleList1= roleService.queryBySql(sql);
+				for(int i = 0 ;i < roleList1.size(); i++){
+					 obj = (Object[]) roleList1.get(i);
+					 String aid = obj[0].toString();
+					 Long ss=Long.valueOf(aid);
+					 Account ac=accountService.getById(ss);
+					 alist.add(ac);
+				}
+				mav.addObject("alist", alist);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return mav;
+     }
+	 
+	 @RequestMapping("/save")
+	 public ModelAndView save(HttpServletRequest request, @Valid MeetingRoom m, BindingResult result,RedirectAttributes redAttr) {
+			try{
+				if(result.hasErrors()){
+					for (ObjectError oe : result.getAllErrors()) {
+						redAttr.addFlashAttribute(Constants.MESSAGE_NAME, oe.getDefaultMessage());
+						redAttr.addFlashAttribute("ret", m);
+						return new ModelAndView("redirect:/meetingRoom/create");
+					}
+				}
+				Date time=new Date();
+				SimpleDateFormat fmat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String date=fmat.format(time);
+				m.setCreateDate(date);
+				m.setUpdateDate(date);
+			   meetingRoomservice.save(m);
+			   redAttr.addFlashAttribute(Constants.MESSAGE_NAME,"添加成功");
+			}catch(Exception e){
+				e.printStackTrace();
+				redAttr.addFlashAttribute(Constants.MESSAGE_NAME,"添加失败");
+			}
+			return new ModelAndView(LIST_ACTION);
+		}
+	 
+	 @RequestMapping("/delete")
+	 public ModelAndView delete(HttpServletRequest request,RedirectAttributes redAttr,Long... id){
+			try{
+				for (Long ss:id) {
+					MeetingApply app=new MeetingApply();
+					app.setMeetingRoom(meetingRoomservice.getById(ss));
+					List<MeetingApply> mapplyList=meetingApplyService.queryByMId(app);
+					for (MeetingApply meetingApply : mapplyList) {
+						Long aid=meetingApply.getId();
+						meetingApplyService.delete(aid);
+					}
+				}
+			    meetingRoomservice.delete(id);
+				redAttr.addFlashAttribute(Constants.MESSAGE_NAME,"删除成功");
+			}catch(Exception e){
+				e.printStackTrace();
+				redAttr.addFlashAttribute(Constants.MESSAGE_NAME,"删除失败");
+			}
+			return new ModelAndView(LIST_ACTION);
+		}
+	 
+	 @RequestMapping("/{id}/edit")
+		public ModelAndView modify(@PathVariable Long id){
+			ModelAndView mav = new ModelAndView("meeting/meetingRoom/update");
+			try{
+				 Object[] obj = null;
+				  List<Account> alist=new ArrayList<Account>();
+				  Role  role=roleService.queryByName(MEETING_MANAGER);
+				  String sql="SELECT * from UF_ACCOUNT_ROLES where ROLE_ID="+role.getId();
+				  List roleList1= roleService.queryBySql(sql);
+					for(int i = 0 ;i < roleList1.size(); i++){
+						 obj = (Object[]) roleList1.get(i);
+						 String aid = obj[0].toString();
+						 Long ss=Long.valueOf(aid);
+						 Account ac=accountService.getById(ss);
+						 alist.add(ac);
+					}
+					mav.addObject("alist", alist);
+				mav.addObject("meeting",meetingRoomservice.getById(id));
+			}catch(Exception e){
+			}
+			return mav;
+		}
+	 
+	 @RequestMapping("/update")
+	 @Transactional(rollbackFor=Exception.class)
+		public ModelAndView update(HttpServletRequest request,@Valid MeetingRoom m,BindingResult res,RedirectAttributes red){
+			try{
+				Date time=new Date();
+				SimpleDateFormat fmat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String date=fmat.format(time);
+				m.setUpdateDate(date);
+				meetingRoomservice.update(m);
+				red.addFlashAttribute(Constants.MESSAGE_NAME,"修改成功");
+			}catch(Exception e){
+				red.addFlashAttribute(Constants.MESSAGE_NAME,"修改失败");
+			}
+			return new ModelAndView(LIST_ACTION);
+		} 
+}
+      

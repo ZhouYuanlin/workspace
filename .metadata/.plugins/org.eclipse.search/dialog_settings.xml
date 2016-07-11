@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="DialogBounds_SearchDialog">
-		<item value="1146" key="DIALOG_WIDTH"/>
+		<item value="1135" key="DIALOG_WIDTH"/>
 		<item value="96" key="DIALOG_Y_ORIGIN"/>
-		<item value="472" key="DIALOG_HEIGHT"/>
 		<item value="63" key="DIALOG_X_ORIGIN"/>
-		<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
+		<item value="491" key="DIALOG_HEIGHT"/>
+		<item value="1|.SF NS Text|11.0|0|COCOA|1|.SFNSText-Regular" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="Search">
 		<list key="Search.processedPageIds">
@@ -32,7 +32,17 @@
 		</list>
 	</section>
 	<section name="SearchDialog">
-		<item value="org.eclipse.jdt.ui.JavaSearchPage" key="PREVIOUS_PAGE"/>
+		<item value="org.eclipse.pde.internal.ui.search.SearchPage" key="PREVIOUS_PAGE"/>
+	</section>
+	<section name="TextSearchPage">
+		<item value="false" key="CASE_SENSITIVE"/>
+		<item value="false" key="REG_EX_SEARCH"/>
+		<item value="false" key="SEARCH_DERIVED"/>
+		<item value="false" key="WHOLE_WORD"/>
+		<item value="0" key="HISTORY_SIZE"/>
+		<section name="EXTENSIONS">
+			<item value="*" key="0"/>
+		</section>
 	</section>
 	<section name="SearchDialog.ScopePart">
 		<item value="0" key="scope"/>

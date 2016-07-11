@@ -1,0 +1,963 @@
+package cn.uuf.domain;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import cn.uuf.domain.activity.Retireoldun;
+import cn.uuf.domain.activity.Retireworthiness;
+import cn.uuf.domain.health.Rethealth;
+import cn.uuf.domain.health.Rethoscosts;
+import cn.uuf.domain.health.Rethospital;
+import cn.uuf.domain.health.Retlabel;
+import cn.uuf.domain.health.Retphone;
+import cn.uuf.domain.ret.Retiredonations;
+import cn.uuf.domain.ret.Retireparty;
+import cn.uuf.domain.ret.Retirepay;
+
+/**
+ * 离退休人员信息表
+ * @author <a href="waxwing819230@sina.com">lth</a>
+ * @version 2.0
+ * @date 2015-10-21
+ */
+@Entity
+@Table(name="uf_ltx_info")
+public class Retirement extends BasicField{
+
+	private static final long serialVersionUID = 8454799863832530177L;
+	@Id
+	@NotEmpty(message="身份证不能为空")
+	private String sfzh;			//身份证号(与登录表的username对应该)
+	private String lxdh;			//联系电话
+	private String gzzh;			//工作证号
+	@NotEmpty(message="姓名不能为空")
+	private String xm;				//姓名
+	private String xb;				//性别
+	@ManyToOne
+	@JoinColumn(name="dwb_id")
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	private CodeDwb dwb;			//原工作单位
+	@ManyToOne
+	@JoinColumn(name="mzb_id")
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	private CodeMzb mzb;			//民族
+	@ManyToOne
+	@JoinColumn(name="zwb_id")
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	private CodeZwb zwb;			//职位
+	@ManyToOne
+	@JoinColumn(name="zjb_id")
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	private CodeZjb zjb;			//职级
+	@ManyToOne
+	@JoinColumn(name="lxb_id")
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	private CodeLxb lxb;			//类型
+	
+	@ManyToOne
+	@JoinColumn(name="zzmm_id")
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	private CodeZzmmb zzmm;			//政治面貌
+	private String jg;				//籍惯
+	private String fyzk;			//婚姻状况
+	private String grxl;			//学历
+	private String grxw;			//学位
+	private String sfdj;			//是否独居
+	private String sfgg;			//是否孤寡
+	private String sssn;			//是否失能
+	private String sfyfz;			//是否有护照
+	@Column(length=6000)
+	private String fzhm;			//护照号码
+	private String sfbjgb;			//是否保健干部
+	private String email;			//邮箱
+	private String qq;				//QQ号
+	private String weix;			//微信
+	private String csrq;			//出生日期(生日)
+	private String gzsj;			//参加工作时间
+	private String lxsj;			//退休时间
+	private String xsdy;			//现享受待遇(来自码表不关联)
+	private String pzsj;			//现享受待遇批准时间
+	private String dfjs;			//党费基数
+	
+	//生活服务
+	private String wsjfs;			//卫生间扶手
+	private String jjyjt;			//急救一键通
+	private String ggywx;			//公共意外险
+	private String zzgbjs;			//在职干部结对
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="createDate desc")
+	private List<Retirework> works;	//工作经历
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="sfmr desc")
+	private List<Retirefamily> familys;//家庭信息
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="mxm desc")
+	private List<Retiremember> members;//家庭成员
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="ret asc")
+	private List<Retirelive> lives;		//养老模式
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="id desc")
+	private List<Retirehelp> helps;		//帮扶
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="tjsj desc")
+	private List<Rethealth> healths;	//医疗健康
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="zyrq desc")
+	private List<Rethospital> hospitals;//住院信息
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="lqrq desc")
+	private List<Rethoscosts> costs;	//医疗费用
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	private List<Retlabel> labels;		//保健标记
+	@Column(length=4000)
+	private String bz;				//说明
+	@Transient
+	private String srtx;			//生日提醒(还差多少天过生日)
+	//党员信息
+	@ManyToOne
+	@JoinColumn(name="party_id")
+	private Retireparty party;		//党支部
+	@ManyToOne
+	@JoinColumn(name="zw_id")
+	private Retireparty zw;			//支委
+	private String rdsj;			//入党时间
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="jfsj desc")
+	private List<Retirepay> pays;	//缴纳党费记录
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="jkrq desc")
+	private List<Retiredonations> donas;	//捐款记录
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="rxrq desc")
+	private List<Retireoldun> olds;			//老年大学
+	@OneToMany(mappedBy="ret",cascade=CascadeType.REMOVE)
+	@OrderBy(value="xjsj desc")
+	private List<Retireworthiness> worths;	//宣讲
+	
+	@Transient
+	private String advancedSearch;			//作为高级查询,不存表
+	
+//	@OneToOne(mappedBy="retirement")
+//	private Retphone retphone;
+	
+	/**
+	 * @return the sfzh
+	 */
+	public String getSfzh() {
+		return sfzh;
+	}
+	/**
+	 * @param sfzh the sfzh to set
+	 */
+	public void setSfzh(String sfzh) {
+		this.sfzh = sfzh;
+	}
+	/**
+	 * @return the lxdh
+	 */
+	public String getLxdh() {
+		return lxdh;
+	}
+	/**
+	 * @param lxdh the lxdh to set
+	 */
+	public void setLxdh(String lxdh) {
+		this.lxdh = lxdh;
+	}
+	/**
+	 * @return the gzzh
+	 */
+	public String getGzzh() {
+		return gzzh;
+	}
+	/**
+	 * @param gzzh the gzzh to set
+	 */
+	public void setGzzh(String gzzh) {
+		this.gzzh = gzzh;
+	}
+	/**
+	 * @return the xm
+	 */
+	public String getXm() {
+		return xm;
+	}
+	/**
+	 * @param xm the xm to set
+	 */
+	public void setXm(String xm) {
+		this.xm = xm;
+	}
+	/**
+	 * @return the xb
+	 */
+	public String getXb() {
+		return xb;
+	}
+	/**
+	 * @param xb the xb to set
+	 */
+	public void setXb(String xb) {
+		this.xb = xb;
+	}
+	
+	/**
+	 * @return the fyzk
+	 */
+	public String getFyzk() {
+		return fyzk;
+	}
+	/**
+	 * @param fyzk the fyzk to set
+	 */
+	public void setFyzk(String fyzk) {
+		this.fyzk = fyzk;
+	}
+	/**
+	 * @return the grxl
+	 */
+	public String getGrxl() {
+		return grxl;
+	}
+	/**
+	 * @return the labels
+	 */
+	public List<Retlabel> getLabels() {
+		return labels;
+	}
+	/**
+	 * @param labels the labels to set
+	 */
+	public void setLabels(List<Retlabel> labels) {
+		this.labels = labels;
+	}
+	/**
+	 * @param grxl the grxl to set
+	 */
+	public void setGrxl(String grxl) {
+		this.grxl = grxl;
+	}
+	/**
+	 * @return the grxw
+	 */
+	public String getGrxw() {
+		return grxw;
+	}
+	/**
+	 * @param grxw the grxw to set
+	 */
+	public void setGrxw(String grxw) {
+		this.grxw = grxw;
+	}
+	/**
+	 * @return the sfdj
+	 */
+	public String getSfdj() {
+		return sfdj;
+	}
+	/**
+	 * @param sfdj the sfdj to set
+	 */
+	public void setSfdj(String sfdj) {
+		this.sfdj = sfdj;
+	}
+	/**
+	 * @return the sfgg
+	 */
+	public String getSfgg() {
+		return sfgg;
+	}
+	/**
+	 * @param sfgg the sfgg to set
+	 */
+	public void setSfgg(String sfgg) {
+		this.sfgg = sfgg;
+	}
+	
+	/**
+	 * @return the wsjfs
+	 */
+	public String getWsjfs() {
+		return wsjfs;
+	}
+	/**
+	 * @param wsjfs the wsjfs to set
+	 */
+	public void setWsjfs(String wsjfs) {
+		this.wsjfs = wsjfs;
+	}
+	/**
+	 * @return the jjyjt
+	 */
+	public String getJjyjt() {
+		return jjyjt;
+	}
+	/**
+	 * @param jjyjt the jjyjt to set
+	 */
+	public void setJjyjt(String jjyjt) {
+		this.jjyjt = jjyjt;
+	}
+	/**
+	 * @return the ggywx
+	 */
+	public String getGgywx() {
+		return ggywx;
+	}
+	/**
+	 * @param ggywx the ggywx to set
+	 */
+	public void setGgywx(String ggywx) {
+		this.ggywx = ggywx;
+	}
+	/**
+	 * @return the zzgbjs
+	 */
+	public String getZzgbjs() {
+		return zzgbjs;
+	}
+	/**
+	 * @param zzgbjs the zzgbjs to set
+	 */
+	public void setZzgbjs(String zzgbjs) {
+		this.zzgbjs = zzgbjs;
+	}
+	/**
+	 * @return the sssn
+	 */
+	public String getSssn() {
+		return sssn;
+	}
+	/**
+	 * @param sssn the sssn to set
+	 */
+	public void setSssn(String sssn) {
+		this.sssn = sssn;
+	}
+	/**
+	 * @return the sfyfz
+	 */
+	public String getSfyfz() {
+		return sfyfz;
+	}
+	/**
+	 * @param sfyfz the sfyfz to set
+	 */
+	public void setSfyfz(String sfyfz) {
+		this.sfyfz = sfyfz;
+	}
+	/**
+	 * @return the fzhm
+	 */
+	public String getFzhm() {
+		return fzhm;
+	}
+	/**
+	 * @param fzhm the fzhm to set
+	 */
+	public void setFzhm(String fzhm) {
+		this.fzhm = fzhm;
+	}
+	/**
+	 * @return the dwb
+	 */
+	public CodeDwb getDwb() {
+		return dwb;
+	}
+	/**
+	 * @param dwb the dwb to set
+	 */
+	public void setDwb(CodeDwb dwb) {
+		this.dwb = dwb;
+	}
+	/**
+	 * @return the mzb
+	 */
+	public CodeMzb getMzb() {
+		return mzb;
+	}
+	/**
+	 * @param mzb the mzb to set
+	 */
+	public void setMzb(CodeMzb mzb) {
+		this.mzb = mzb;
+	}
+	/**
+	 * @return the zwb
+	 */
+	public CodeZwb getZwb() {
+		return zwb;
+	}
+	/**
+	 * @param zwb the zwb to set
+	 */
+	public void setZwb(CodeZwb zwb) {
+		this.zwb = zwb;
+	}
+	/**
+	 * @return the zw
+	 */
+	public Retireparty getZw() {
+		return zw;
+	}
+	/**
+	 * @param zw the zw to set
+	 */
+	public void setZw(Retireparty zw) {
+		this.zw = zw;
+	}
+	/**
+	 * @return the zjb
+	 */
+	public CodeZjb getZjb() {
+		return zjb;
+	}
+	/**
+	 * @param zjb the zjb to set
+	 */
+	public void setZjb(CodeZjb zjb) {
+		this.zjb = zjb;
+	}
+	/**
+	 * @return the lxb
+	 */
+	public CodeLxb getLxb() {
+		return lxb;
+	}
+	/**
+	 * @param lxb the lxb to set
+	 */
+	public void setLxb(CodeLxb lxb) {
+		this.lxb = lxb;
+	}
+	/**
+	 * @return the zzmm
+	 */
+	public CodeZzmmb getZzmm() {
+		return zzmm;
+	}
+	/**
+	 * @param zzmm the zzmm to set
+	 */
+	public void setZzmm(CodeZzmmb zzmm) {
+		this.zzmm = zzmm;
+	}
+	/**
+	 * @return the jg
+	 */
+	public String getJg() {
+		return jg;
+	}
+	/**
+	 * @param jg the jg to set
+	 */
+	public void setJg(String jg) {
+		this.jg = jg;
+	}
+	/**
+	 * @return the dfjs
+	 */
+	public String getDfjs() {
+		return dfjs;
+	}
+	/**
+	 * @param dfjs the dfjs to set
+	 */
+	public void setDfjs(String dfjs) {
+		this.dfjs = dfjs;
+	}
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	/**
+	 * @return the qq
+	 */
+	public String getQq() {
+		return qq;
+	}
+	/**
+	 * @param qq the qq to set
+	 */
+	public void setQq(String qq) {
+		this.qq = qq;
+	}
+	/**
+	 * @return the weix
+	 */
+	public String getWeix() {
+		return weix;
+	}
+	/**
+	 * @param weix the weix to set
+	 */
+	public void setWeix(String weix) {
+		this.weix = weix;
+	}
+	/**
+	 * @return the csrq
+	 */
+	public String getCsrq() {
+		return csrq;
+	}
+	/**
+	 * @param csrq the csrq to set
+	 */
+	public void setCsrq(String csrq) {
+		this.csrq = csrq;
+	}
+	/**
+	 * @return the works
+	 */
+	public List<Retirework> getWorks() {
+		return works;
+	}
+	/**
+	 * @param works the works to set
+	 */
+	public void setWorks(List<Retirework> works) {
+		this.works = works;
+	}
+	
+	/**
+	 * @return the family
+	 */
+	public List<Retirefamily> getFamilys() {
+		return familys;
+	}
+	/**
+	 * @param family the family to set
+	 */
+	public void setFamilys(List<Retirefamily> family) {
+		this.familys = family;
+	}
+	
+	/**
+	 * @return the members
+	 */
+	public List<Retiremember> getMembers() {
+		return members;
+	}
+	/**
+	 * @param members the members to set
+	 */
+	public void setMembers(List<Retiremember> members) {
+		this.members = members;
+	}
+	
+	/**
+	 * @return the lives
+	 */
+	public List<Retirelive> getLives() {
+		return lives;
+	}
+	/**
+	 * @param lives the lives to set
+	 */
+	public void setLives(List<Retirelive> lives) {
+		this.lives = lives;
+	}
+	/**
+	 * @return the bz
+	 */
+	public String getBz() {
+		return bz;
+	}
+	/**
+	 * @param bz the bz to set
+	 */
+	public void setBz(String bz) {
+		this.bz = bz;
+	}
+	/**
+	 * 添加工作经历
+	 * @param w
+	 */
+	public void addWork(Retirework w){
+		if(this.works == null)
+			this.works = new ArrayList<Retirework>();
+		this.works.add(w);
+	}
+	/**
+	 * 添加家庭信息
+	 * @param f
+	 */
+	public void addFamily(Retirefamily f){
+		if(this.familys == null)
+			this.familys = new ArrayList<Retirefamily>();
+		this.familys.add(f);
+	}
+	/**
+	 * 添加家庭成员
+	 * @param m
+	 */
+	public void addMember(Retiremember m){
+		if(this.members == null)
+			this.members = new ArrayList<Retiremember>();
+		this.members.add(m);
+	}
+	/**
+	 * 添加养老模式
+	 * @param l
+	 */
+	public void addLives(Retirelive l){
+		if(this.lives == null)
+			this.lives = new ArrayList<Retirelive>();
+		this.lives.add(l);
+	}
+	/**
+	 * @return the srtx
+	 */
+	public String getSrtx() {
+		String t = "";
+		if(csrq != null){
+			try{
+				SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd");
+		        String clidate = csrq;
+		        Calendar cToday = Calendar.getInstance(); // 存今天
+		        Calendar cBirth = Calendar.getInstance(); // 存生日
+		        cBirth.setTime(myFormatter.parse(clidate)); // 设置生日
+		        cBirth.set(Calendar.YEAR, cToday.get(Calendar.YEAR)); // 修改为本年
+		        int days; 
+		        if (cBirth.get(Calendar.DAY_OF_YEAR) < cToday.get(Calendar.DAY_OF_YEAR)) {
+		            // 生日已经过了，要算明年的了
+		            days = cToday.getActualMaximum(Calendar.DAY_OF_YEAR) - cToday.get(Calendar.DAY_OF_YEAR);
+		            days += cBirth.get(Calendar.DAY_OF_YEAR);
+		        } else {
+		            // 生日还没过
+		            days = cBirth.get(Calendar.DAY_OF_YEAR) - cToday.get(Calendar.DAY_OF_YEAR);
+		        }
+		        // 输出结果
+		        if (days == 0) {
+		            t="今天";
+		        } else if(days < 30){
+		            t = days + "天";
+		        }else if(30 < days && days < 60){
+		        	t = "一个月以上";
+		        }else if(60 < days && days < 90)
+		        	t = "两个月以上";
+		        else if(90 < days && days < 120)
+		        	t = "三个月以上";
+		        else if(120 < days && days < 150)
+		        	t = "半年内";
+		        else
+		        	t = "半年以上或已过	";
+			}catch(Exception e){};
+		}
+		return t;
+	}
+	/**
+	 * @param srtx the srtx to set
+	 */
+	public void setSrtx(String srtx) {
+		this.srtx = srtx;
+	}
+	
+	/**
+	 * @return the helps
+	 */
+	public List<Retirehelp> getHelps() {
+		return helps;
+	}
+	/**
+	 * @param helps the helps to set
+	 */
+	public void setHelps(List<Retirehelp> helps) {
+		this.helps = helps;
+	}
+	
+	/**
+	 * @return the hospitals
+	 */
+	public List<Rethospital> getHospitals() {
+		return hospitals;
+	}
+	/**
+	 * @param hospitals the hospitals to set
+	 */
+	public void setHospitals(List<Rethospital> hospitals) {
+		this.hospitals = hospitals;
+	}
+	/**
+	 * @return the party
+	 */
+	public Retireparty getParty() {
+		return party;
+	}
+	/**
+	 * @param party the party to set
+	 */
+	public void setParty(Retireparty party) {
+		this.party = party;
+	}
+	
+	/**
+	 * @return the rdsj
+	 */
+	public String getRdsj() {
+		return rdsj;
+	}
+	/**
+	 * @return the gzsj
+	 */
+	public String getGzsj() {
+		return gzsj;
+	}
+	/**
+	 * @param gzsj the gzsj to set
+	 */
+	public void setGzsj(String gzsj) {
+		this.gzsj = gzsj;
+	}
+	/**
+	 * @return the lxsj
+	 */
+	public String getLxsj() {
+		return lxsj;
+	}
+	/**
+	 * @param lxsj the lxsj to set
+	 */
+	public void setLxsj(String lxsj) {
+		this.lxsj = lxsj;
+	}
+	/**
+	 * @param rdsj the rdsj to set
+	 */
+	public void setRdsj(String rdsj) {
+		this.rdsj = rdsj;
+	}
+	
+	
+	/**
+	 * @return the pays
+	 */
+	public List<Retirepay> getPays() {
+		return pays;
+	}
+	/**
+	 * @param pays the pays to set
+	 */
+	public void setPays(List<Retirepay> pays) {
+		this.pays = pays;
+	}
+	
+	/**
+	 * @return the donas
+	 */
+	public List<Retiredonations> getDonas() {
+		return donas;
+	}
+	/**
+	 * @param donas the donas to set
+	 */
+	public void setDonas(List<Retiredonations> donas) {
+		this.donas = donas;
+	}
+	
+	/**
+	 * @return the sfbjgb
+	 */
+	public String getSfbjgb() {
+		return sfbjgb;
+	}
+	/**
+	 * @param sfbjgb the sfbjgb to set
+	 */
+	public void setSfbjgb(String sfbjgb) {
+		this.sfbjgb = sfbjgb;
+	}
+	
+	/**
+	 * @return the costs
+	 */
+	public List<Rethoscosts> getCosts() {
+		return costs;
+	}
+	/**
+	 * @param costs the costs to set
+	 */
+	public void setCosts(List<Rethoscosts> costs) {
+		this.costs = costs;
+	}
+	/**
+	 * @return the olds
+	 */
+	public List<Retireoldun> getOlds() {
+		return olds;
+	}
+	/**
+	 * @param olds the olds to set
+	 */
+	public void setOlds(List<Retireoldun> olds) {
+		this.olds = olds;
+	}
+	/**
+	 * @return the worths
+	 */
+	public List<Retireworthiness> getWorths() {
+		return worths;
+	}
+	/**
+	 * @return the xsdy
+	 */
+	public String getXsdy() {
+		return xsdy;
+	}
+	
+	/**
+	 * @return the pzsj
+	 */
+	public String getPzsj() {
+		return pzsj;
+	}
+	/**
+	 * @param pzsj the pzsj to set
+	 */
+	public void setPzsj(String pzsj) {
+		this.pzsj = pzsj;
+	}
+	/**
+	 * @param xsdy the xsdy to set
+	 */
+	public void setXsdy(String xsdy) {
+		this.xsdy = xsdy;
+	}
+	/**
+	 * @return the healths
+	 */
+	public List<Rethealth> getHealths() {
+		return healths;
+	}
+	/**
+	 * @param healths the healths to set
+	 */
+	public void setHealths(List<Rethealth> healths) {
+		this.healths = healths;
+	}
+	/**
+	 * @param worths the worths to set
+	 */
+	public void setWorths(List<Retireworthiness> worths) {
+		this.worths = worths;
+	}
+	/**
+	 * 添加帮扶
+	 * @param r
+	 */
+	public void addHelps(Retirehelp r){
+		if(this.helps == null)
+			this.helps = new ArrayList<Retirehelp>();
+		this.helps.add(r);
+	}
+	/**
+	 * 添加党费信息
+	 * @param p
+	 */
+	public void addPays(Retirepay p){
+		if(this.pays == null)
+			this.pays = new ArrayList<Retirepay>();
+		this.pays.add(p);
+	}
+	/**
+	 * 添加捐款记录
+	 * @param d
+	 */
+	public void addDonats(Retiredonations d){
+		if(this.donas == null)
+			this.donas = new ArrayList<Retiredonations>();
+		this.donas.add(d);
+	}
+	/**
+	 * 添加老年大学
+	 * @param d
+	 */
+	public void addOldun(Retireoldun d){
+		if(this.olds == null)
+			this.olds = new ArrayList<Retireoldun>();
+		this.olds.add(d);
+	}
+	/**
+	 * 添加宣讲
+	 * @param w
+	 */
+	public void addWorths(Retireworthiness w){
+		if(this.worths == null)
+			this.worths = new ArrayList<Retireworthiness>();
+		this.worths.add(w);
+	}
+	/**
+	 * 添加医疗健康
+	 * @param t
+	 */
+	public void addHealth(Rethealth t){
+		if(this.healths == null)
+			this.healths = new ArrayList<Rethealth>();
+		this.healths.add(t);
+	}
+	/**
+	 * 添加住院信息
+	 * @param p
+	 */
+	public void addHospital(Rethospital p){
+		if(this.hospitals == null)
+			this.hospitals = new ArrayList<Rethospital>();
+		this.hospitals.add(p);
+	}
+	/**
+	 * 添加医疗费用
+	 * @param c
+	 */
+	public void ddCosts(Rethoscosts c){
+		if(this.costs == null)
+			this.costs = new ArrayList<Rethoscosts>();
+		this.costs.add(c);
+	}
+	
+	
+	public String getAdvancedSearch() {
+		return advancedSearch;
+	}
+	public void setAdvancedSearch(String advancedSearch) {
+		this.advancedSearch = advancedSearch;
+	}
+	
+	
+	
+//	public Retphone getRetphone() {
+//		return retphone;
+//	}
+//	public void setRetphone(Retphone retphone) {
+//		this.retphone = retphone;
+//	}
+	
+	
+	
+}
+

@@ -1,0 +1,24 @@
+#main,#main2,#main3,#main4,#main5,#main6,#main7,#main8,#main9
+,#main10,#main11,#main12,#main13,#main14,#main15,#yuan1,#yuan2,#yuan3,#yuanboth{
+    height: 240px;
+}
+.mt20{
+    margin-top: 20px;
+}
+.xiuboth{
+    text-align: center;
+    width: 100%;
+    height: 40px;
+}
+.lixiu{
+    width: 0px;
+    float: left;
+    height: 40px;
+    background-color: white;
+}
+.tuixiu{
+    width: 0px;
+    float: left;
+    height: 40px;
+    background-color: white;
+}

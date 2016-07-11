@@ -1,0 +1,735 @@
+package cn.uuf.ltxxt.life.controller;
+
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.print.Doc;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import cn.uuf.contants.Constants;
+import cn.uuf.domain.User;
+import cn.uuf.domain.life.DocGrp;
+import cn.uuf.domain.life.Goods;
+import cn.uuf.domain.life.Photo;
+import cn.uuf.domain.life.Reply;
+import cn.uuf.ltxxt.life.service.GoodsService;
+import cn.uuf.ltxxt.life.service.GroupService;
+import cn.uuf.ltxxt.life.service.PhotosService;
+import cn.uuf.ltxxt.login.controller.BaseController;
+import cn.uuf.ltxxt.system.permission.service.UserService;
+import cn.uuf.util.DateUtil;
+import cn.uuf.util.Paginate;
+
+/**
+ * 相册
+ * @author Suntingwen
+ *
+ */
+@Controller
+@RequestMapping("/picture")
+public class PictrueController extends BaseController{
+	private final String LIST_ACTION = "redirect:/picture";
+	@Autowired
+	private PhotosService	photosService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private GroupService groupService;
+	@Autowired
+	private GoodsService goodsService;
+	private static  Long photoId;
+	private static Long backId;
+	@RequestMapping
+	public ModelAndView index(Integer page,DocGrp p,HttpServletRequest request,HttpServletResponse response,RedirectAttributes re){
+		ModelAndView mav = new ModelAndView("life/picture/index");
+		try{
+			page = page == null || page < 0 ? 1 : page;
+			int start = (page - 1) * size;
+			p.setType(Constants.PICTURES);
+			List<DocGrp> list = groupService.getAll();
+			List<DocGrp> list1 = new ArrayList<>();
+			List<Photo> photoPath = new ArrayList<>();
+			List<Integer> sum = new ArrayList<>();
+			for (DocGrp docGrp : list) {
+				if(docGrp.getParent()==null){
+					if(docGrp.getPhoto()!=null && docGrp.getPhoto().size()>0){
+						photoPath.add(docGrp.getPhoto().get(0));
+						sum.add(docGrp.getPhoto().size());
+					}else{
+						photoPath.add(null);
+						sum.add(0);
+					}
+					list1.add(docGrp);
+				}
+			}
+			backId = list1.get(0).getId();
+			Long count = groupService.getCount(p);
+			paginate = new Paginate(list,count, size, page);
+			mav.addObject("paginate",paginate);
+			mav.addObject("list",list1);
+			mav.addObject("backid",backId);
+			mav.addObject("photoList", photoPath);
+			mav.addObject("count", sum);
+			photoId=null;
+			mav.addObject("appsList",SpUtil.list);
+	}catch(Exception e){
+			e.printStackTrace();
+			mav.addObject(Constants.MESSAGE_NAME, "未找到数据");
+		}
+		return mav;
+	}
+	/**
+	 * 增加
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping("/{id}/create")
+	public ModelAndView create(@PathVariable Long id,HttpServletRequest request,HttpServletResponse response,Photo r,String msg)throws Exception{
+		ModelAndView mav = new ModelAndView("life/picture/create");
+		try {
+			List<DocGrp> list = groupService.getAll();
+			if(list.size()==0){
+				return new ModelAndView("life/picture/create2");
+			}
+			mav.addObject("list", list);
+			mav.addObject("back", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mav.addObject(Constants.MESSAGE_NAME, msg);
+		return mav;
+	}
+	/**
+	 * 首页跳转创建相册页面
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping("/{id}/create2")
+	public ModelAndView create2(@PathVariable Long id,HttpServletRequest request,HttpServletResponse response,Photo r)throws Exception{
+		ModelAndView mav = new ModelAndView("life/picture/create2");
+		try {
+			List<DocGrp> list = groupService.getAll();
+			mav.addObject("list", list);
+			mav.addObject("back", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mav;
+	}
+	/**
+	 * 进入某指定相册后跳转的创建相册页面
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping("/{id}/create3")
+	public ModelAndView create3(@PathVariable Long id,HttpServletRequest request,HttpServletResponse response,Photo r)throws Exception{
+		ModelAndView mav = new ModelAndView("life/picture/create3");
+		try {
+			List<DocGrp> list = groupService.getAll();
+			mav.addObject("list", list);
+			mav.addObject("back", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mav;
+	}
+	/**
+	 * 创建相册
+	 */
+	@RequestMapping("/{albumId}/doCreateAlbum2")
+	public ModelAndView doCreateAlbum(HttpServletRequest request,HttpServletResponse response,@Valid Photo p,BindingResult result,DocGrp grp,RedirectAttributes redirect,Long nameId,@PathVariable Long albumId)throws Exception{
+		ModelAndView mav = new ModelAndView("redirect:/picture/"+albumId+"/view/s");
+		try{
+			Long id1 = 0L;
+			if(result.hasErrors()){
+				List<ObjectError> ls = result.getAllErrors();
+				for(ObjectError oe : ls){
+					return create(id1,request,response,p,oe.getDefaultMessage());
+				}
+			}
+			if(nameId != null){
+				grp = groupService.getById(nameId);
+			}else{
+				grp.setType(Constants.PICTURES);
+				grp.setZjh(this.getCurrentUser().getRealname());
+				if(albumId!=null){
+					grp.setParent(groupService.getById(albumId));
+				}else{
+					grp.setParent(null);
+				}
+				grp.setSummary(grp.getSummary());
+				grp.setCdate(DateUtil.getCuurentDate(new Date(), "yyyy-MM-dd"));
+				groupService.save(grp);
+			}
+			if(grp.getParent()!=null){
+				groupService.getById(grp.getParent().getId());
+			}
+			groupService.update(grp);
+			mav.addObject("backid", groupService.getById(albumId).getId());
+			redirect.addFlashAttribute(Constants.MESSAGE_NAME, "创建相册成功！");
+		}catch(Exception e){
+			e.printStackTrace();
+			redirect.addFlashAttribute(Constants.MESSAGE_NAME, "相册创建失败！");
+		}
+		return mav;
+	}
+	/**
+	 * 创建相册
+	 */
+	@RequestMapping("/{albumId}/doCreateAlbum1")
+	public ModelAndView doCreateAlbum1(HttpServletRequest request,HttpServletResponse response,@Valid Photo p,BindingResult result,DocGrp grp,RedirectAttributes redirect,Long nameId,@PathVariable Long albumId)throws Exception{
+		ModelAndView mav = new ModelAndView(LIST_ACTION);
+		try{
+			Long id1 = 0L;
+			if(result.hasErrors()){
+				List<ObjectError> ls = result.getAllErrors();
+				for(ObjectError oe : ls){
+					return create(id1,request,response,p,oe.getDefaultMessage());
+				}
+			}
+			if(nameId != null){
+				grp = groupService.getById(nameId);
+			}else{
+				grp.setType(Constants.PICTURES);
+				grp.setZjh(this.getCurrentUser().getRealname());
+				if(photoId!=null){
+					grp.setParent(groupService.getById(photoId));
+				}else{
+					grp.setParent(null);
+				}
+				grp.setSummary(grp.getSummary());
+				grp.setCdate(DateUtil.getCuurentDate(new Date(), "yyyy-MM-dd"));
+				groupService.save(grp);
+			}
+			if(grp.getParent()!=null){
+				groupService.getById(grp.getParent().getId());
+			}
+			groupService.update(grp);
+			mav.addObject("backid", groupService.getById(albumId).getId());
+			redirect.addFlashAttribute(Constants.MESSAGE_NAME, "创建相册成功！");
+		}catch(Exception e){
+			e.printStackTrace();
+			redirect.addFlashAttribute(Constants.MESSAGE_NAME, "相册创建失败！");
+		}
+		return mav;
+	}
+	
+	
+	/**
+	 * 跳转上传图片页面
+	 * @param id
+	 * @param request
+	 * @param response
+	 * @param r
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/{id}/upLoadPhoto")
+	public ModelAndView uploadphoto(@PathVariable Long id,HttpServletRequest request,HttpServletResponse response,Photo r)throws Exception{
+		ModelAndView mav = new ModelAndView("life/picture/uploadphoto");
+		try {
+			mav.addObject("back", id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mav;
+	}
+	
+	/**
+	 * 上传图片
+	 * @param files
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping("/{albumId}/doUploadPhoto")
+	public ModelAndView doUpLoadPhoto(@RequestParam("files[]") MultipartFile[] files,HttpServletRequest request,HttpServletResponse response,@Valid Photo p,BindingResult result,RedirectAttributes redirect,@PathVariable Long albumId)throws Exception{
+		ModelAndView mav = new ModelAndView("redirect:/picture/"+albumId+"/view/s");
+		try{
+			DocGrp grp = groupService.getById(albumId);
+			if(result.hasErrors()){
+				List<ObjectError> ls = result.getAllErrors();
+				for(ObjectError oe : ls){
+					return create(albumId,request,response,p,oe.getDefaultMessage());
+				}
+			}
+			for(int i = 0 ;i< files.length;i++){
+				if(StringUtils.isNotEmpty(files[i].getOriginalFilename())){
+					p = new Photo();
+					Long size = files[i].getSize();
+					if(size > 1024*1024*20*2){
+						redirect.addFlashAttribute(Constants.MESSAGE_NAME, "上传失败！单个上传文件最大为10M");
+						return mav;
+					}
+					String path = request.getSession().getServletContext().getRealPath("/") ;
+					String separator = "/";//File.separator;
+					String childPath =  "upload"+separator+"life"+separator+"picture"+separator+ DateUtil.getMSDateTime(new Date(), "")+separator;
+					path += childPath;
+					File file = new File(path);
+					if(!file.exists())
+						file.mkdirs();
+					String fileName = files[i].getOriginalFilename();
+					String fileType = fileName.substring(fileName.lastIndexOf("."));
+					fileName = i+DateUtil.getMSDateTime(new Date(), "")+fileType;
+					String newPath = path+fileName;
+					String absUrl = separator+childPath+fileName;
+					DataOutputStream out = new DataOutputStream(new FileOutputStream(newPath));
+					InputStream is = files[i].getInputStream();
+					byte[] buffer = new byte[2048]; 
+					while(is.read(buffer)>0){ 
+				  out.write(buffer);
+				} 
+					is.close();
+					out.close();
+					
+					p.setTitle(p.getTitle());
+					p.setCdate(DateUtil.getCuurentDate(new Date(),  "yyyy-MM-dd"));
+					p.setUrl(absUrl);
+					p.setStatus(Constants.APP_WAIT);
+					p.setGrp(grp);
+					p.setZjh(getCurrentUser().getRealname());
+					grp.setDelUrl(path);
+					grp.setPh(p);
+					photosService.save(p);
+				}
+			}
+			mav.addObject("backid", albumId);
+			groupService.update(grp);
+			redirect.addFlashAttribute(Constants.MESSAGE_NAME, "图片上传成功！");
+		}catch(Exception e){
+			e.printStackTrace();
+			redirect.addFlashAttribute(Constants.MESSAGE_NAME, "图片上传失败！");
+		}
+		return mav;
+	}
+	
+	/**
+	 * 上传图片到指定相册
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping("/doUpload")
+	public ModelAndView doUpload(@RequestParam("files[]") MultipartFile[] files,HttpServletRequest request,HttpServletResponse response,@Valid Photo p,BindingResult result,DocGrp grp,RedirectAttributes redirect,Long nameId)throws Exception{
+		ModelAndView mav = new ModelAndView(LIST_ACTION);
+		try{
+			Long id = 0L;
+			if(result.hasErrors()){
+				List<ObjectError> ls = result.getAllErrors();
+				for(ObjectError oe : ls){
+					return create(id,request,response,p,oe.getDefaultMessage());
+				}
+				
+			}
+			if(nameId != null){
+				grp = groupService.getById(nameId);
+			}else{
+				grp.setType(Constants.PICTURES);
+				grp.setZjh(this.getCurrentUser().getRealname());
+				if(photoId!=null){
+					grp.setParent(groupService.getById(photoId));
+				}else{
+					grp.setParent(null);
+				}
+				grp.setSummary(grp.getSummary());
+				grp.setCdate(DateUtil.getCuurentDate(new Date(), "yyyy-MM-dd"));
+				groupService.save(grp);
+			}
+			if(grp.getParent()!=null){
+				groupService.getById(grp.getParent().getId());
+			}
+			for(int i = 0 ;i< files.length;i++){
+				p = new Photo();
+				Long size = files[i].getSize();
+				if(size > 1024*1024*20*2){
+					redirect.addFlashAttribute(Constants.MESSAGE_NAME, "上传失败！单个上传文件最大为10M");
+					return mav;
+				}
+				String path = request.getSession().getServletContext().getRealPath("/") ;
+				String separator = "/";//File.separator;
+				String childPath =  "upload"+separator+"life"+separator+"picture"+separator+ DateUtil.getMSDateTime(new Date(), "")+separator;
+				path += childPath;
+				File file = new File(path);
+				if(!file.exists())
+					file.mkdirs();
+				String fileName = files[i].getOriginalFilename();
+				String fileType = fileName.substring(fileName.lastIndexOf("."));
+				fileName = i+DateUtil.getMSDateTime(new Date(), "")+fileType;
+				String newPath = path+fileName;
+				String absUrl = separator+childPath+fileName;
+				DataOutputStream out = new DataOutputStream(new FileOutputStream(newPath));
+				InputStream is = files[i].getInputStream();
+				byte[] buffer = new byte[2048]; 
+				while(is.read(buffer)>0){ 
+		    	  out.write(buffer);
+		        } 
+				is.close();
+				out.close();
+				
+				p.setTitle(p.getTitle());
+				p.setCdate(DateUtil.getCuurentDate(new Date(),  "yyyy-MM-dd"));
+				p.setUrl(absUrl);
+				p.setStatus(Constants.APP_WAIT);
+				p.setGrp(grp);
+				p.setZjh(getCurrentUser().getRealname());
+				grp.setDelUrl(path);
+				grp.setPh(p);
+				photosService.save(p);
+			}
+			groupService.update(grp);
+			redirect.addFlashAttribute(Constants.MESSAGE_NAME, "上传成功！");
+			this.writer("上传照片成功", request.getRemoteAddr(), this.getCurrentUser().getUsername());
+		}catch(Exception e){
+			e.printStackTrace();
+			redirect.addFlashAttribute(Constants.MESSAGE_NAME, "上传失败！");
+		}
+		return mav;
+	}
+	
+	/**
+	 * 显示详情
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/{id}/view")
+	public ModelAndView showDetail(@PathVariable Long id,Integer page,HttpServletRequest request,HttpServletResponse response)throws Exception{
+		ModelAndView mav = new ModelAndView("life/picture/detail");
+		try {
+			Photo byId = photosService.getById(id);
+			DocGrp grp = groupService.getById(byId.getGrp().getId());
+			Photo p = new Photo();
+			page = page == null || page < 0 ? 1 : page;
+			int start = (page - 1) * size;
+			p.setGrp(grp);
+			List<Photo> list = photosService.queryByPage(p, start, Integer.MAX_VALUE);
+			Long count = photosService.getCount(p);
+			paginate = new Paginate(list,count, size, page);
+			mav.addObject("paginate",paginate);
+			mav.addObject("grp", grp);
+			mav.addObject("list", list);
+			mav.addObject("back",grp.getId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mav;
+	}
+	@RequestMapping("/{id}/view/s")
+	public ModelAndView showDetail2(@PathVariable Long id,DocGrp p,Integer page,HttpServletRequest request,HttpServletResponse response)throws Exception{
+			ModelAndView mav =  new ModelAndView("life/picture/_album");
+		try{
+				
+				page = page == null || page < 0 ? 1 : page;
+				int start = (page - 1) * size;
+				p.setType(Constants.PICTURES);
+				DocGrp byId = groupService.getById(id);
+				photoId=byId.getId();
+				List<DocGrp> list =byId.getChilds();
+				List<Photo> photo = byId.getPhoto();
+				List<DocGrp> list1 = new ArrayList<>();
+				List<Integer> sum = new ArrayList<>();
+				List<Photo> photoPath = new ArrayList<>();
+				for (DocGrp docGrp : list) {
+					if(docGrp.getParent()!=null){
+						if(docGrp.getPhoto()!=null && docGrp.getPhoto().size()>0){
+							photoPath.add(docGrp.getPhoto().get(0));
+							sum.add(docGrp.getPhoto().size());
+						}else{
+							photoPath.add(null);
+							sum.add(0);
+						}
+						list1.add(docGrp);
+					}
+				}
+				Long count = groupService.getCount(p);
+				paginate = new Paginate(list,count, size, page);
+				mav.addObject("paginate",paginate);
+				mav.addObject("list",list1);
+				mav.addObject("photolist",photo);
+				mav.addObject("photopath",photoPath);
+				mav.addObject("count", sum);
+				mav.addObject("backid",id);
+				mav.addObject("DocName",byId.getName());
+				mav.addObject("backid",byId.getId());
+				mav.addObject("appsList",SpUtil.list);
+		}catch(Exception e){
+				e.printStackTrace();
+				mav.addObject(Constants.MESSAGE_NAME, "未找到数据");
+			
+		}
+		return mav;
+	}
+	
+	//返回上级目录
+	@SuppressWarnings("null")
+	@RequestMapping("/{id}/back")
+	public ModelAndView showDetail3(@PathVariable Long id,DocGrp p,Integer page,HttpServletRequest request,HttpServletResponse response)throws Exception{
+			ModelAndView mav =  null;
+		try{
+				if(p.getName()!=null){
+					p.setName(null);
+				}
+				if(p.getSummary()!=null&&p.getSummary().equals("")){
+					p.setSummary(null);
+				}
+				page = page == null || page < 0 ? 1 : page;
+				int start = (page - 1) * size;
+				p.setType(Constants.PICTURES);
+				DocGrp byId = groupService.getById(id);
+				if(byId.getParent()!=null){
+					mav = new ModelAndView("life/picture/_album");
+					DocGrp list =byId.getParent();
+					backId=list.getId();
+					List<DocGrp> childs = list.getChilds();
+					List<Photo> photo = list.getPhoto();
+					List<DocGrp> list1 = new ArrayList<>();
+					List<Integer> sum = new ArrayList<>();
+					List<Photo> photoPath = new ArrayList<>();
+					for (DocGrp docGrp : childs) {
+						if(docGrp.getParent()!=null){
+							if(docGrp.getPhoto()!=null && docGrp.getPhoto().size()>0){
+								photoPath.add(docGrp.getPhoto().get(0));
+								sum.add(docGrp.getPhoto().size());
+							}else{
+								photoPath.add(null);
+								sum.add(0);
+							}
+							list1.add(docGrp);
+						}
+					}
+					Long count = groupService.getCount(p);
+					paginate = new Paginate(childs,count, size, page);
+					mav.addObject("paginate",paginate);
+					mav.addObject("list",list1);
+					mav.addObject("photolist",photo);
+					mav.addObject("photopath",photoPath);
+					mav.addObject("count", sum);
+					mav.addObject("DocName", byId.getParent().getName());
+					mav.addObject("backid", list.getId());
+					mav.addObject("appsList",SpUtil.list);
+				}else{
+					mav=new ModelAndView("life/picture/index");
+					List<DocGrp> list = groupService.getAll();
+					List<DocGrp> list1 = new ArrayList<>();
+					List<Photo> photoPath = new ArrayList<>();
+					List<Integer> sum = new ArrayList<>();
+					for (DocGrp docGrp : list) {
+						if(docGrp.getParent()==null){
+							if(docGrp.getPhoto()!=null && docGrp.getPhoto().size()>0){
+								photoPath.add(docGrp.getPhoto().get(0));
+								sum.add(docGrp.getPhoto().size());
+							}else{
+								photoPath.add(null);
+								sum.add(0);
+							}
+							list1.add(docGrp);
+						}
+					}
+					Long count = groupService.getCount(p);
+					paginate = new Paginate(list,count, size, page);
+					mav.addObject("paginate",paginate);
+					mav.addObject("list",list1);
+					mav.addObject("backid", backId);
+					mav.addObject("photoList", photoPath);
+					mav.addObject("count", sum);
+					photoId=null;
+					mav.addObject("appsList",SpUtil.list);
+				}
+		}catch(Exception e){
+				e.printStackTrace();
+				mav.addObject(Constants.MESSAGE_NAME, "未找到数据");
+			
+		}
+		return mav;
+	}
+	/**
+	 * 修改相册部分
+	 * @param pointID
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/{pointID}/edit")
+	public ModelAndView modify(@PathVariable Long pointID,HttpServletRequest request,HttpServletResponse response)throws Exception{
+		ModelAndView mav = new ModelAndView("life/picture/update");
+		DocGrp grp=groupService.getById(pointID);
+		mav.addObject("grp", grp);
+		backId=pointID;
+		mav.addObject("back",pointID);
+		return mav;
+	}
+	@RequestMapping(value="update",method=RequestMethod.POST)
+	public ModelAndView update(@Valid DocGrp grp,BindingResult result,HttpServletRequest request,HttpServletResponse response,RedirectAttributes redirect,Long id){
+		try {
+			DocGrp newGrp = groupService.getById(id);
+			if(result.hasErrors()){
+				List<ObjectError> ls = result.getAllErrors();
+				for(ObjectError oe : ls){
+					return modify(grp.getId(),request,response);//验证未通过返回添加页
+				}
+			}
+			newGrp.setName(grp.getName());
+			newGrp.setSummary(grp.getSummary());
+			groupService.update(newGrp);
+			redirect.addFlashAttribute(Constants.MESSAGE_NAME, "相册修改成功！");
+			this.writer("相册修改成功！",request.getRemoteAddr(),this.getCurrentUser().getUsername());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ModelAndView(LIST_ACTION);
+	}
+	
+	
+	/**
+	 * 删除照片和相册
+	 * @author: lth
+	 * @creation: Oct 10, 2013 2:34:25 PM
+	 * @return: ModelAndView
+	 */
+	@RequestMapping("/{id}/{pointid}/{photoid}/del")
+	public ModelAndView del(HttpServletRequest request,HttpServletResponse response,RedirectAttributes redirect,@PathVariable String pointid,@PathVariable String photoid,Long id)throws Exception{
+		ModelAndView mav = null;
+		try{
+			DocGrp linShiGrp = null;
+			//删除图片
+			if(!photoid.equals("null") && StringUtils.isNotEmpty(photoid)){
+				String[] photos = photoid.split(",");
+				String path = request.getSession().getServletContext().getRealPath("") ;
+				Photo photo = new Photo();
+				for(String ids:photos){
+					Long.parseLong(ids);
+					photo = photosService.getById(Long.parseLong(ids));
+					DocGrp grp = photo.getGrp();
+					linShiGrp = photo.getGrp();
+					grp.setPh(null);
+					groupService.update(grp);
+					photosService.delete(photo);
+				}
+				
+				
+			}
+			//删除相册
+			if(!pointid.equals("null") && StringUtils.isNotEmpty(pointid)){
+				Photo photo = new Photo();
+				String[] aldums = pointid.split(",");
+				for(String ids:aldums){
+					DocGrp grp = groupService.getById(Long.parseLong(ids));
+					linShiGrp=grp.getParent();
+					grp.setPh(null);
+					groupService.update(grp);
+					List<Photo> list = grp.getPhoto();
+					if(list!=null){
+						for(int i = 0 ; i< list.size();i++){
+							photo = list.get(i);
+							photosService.delete(photo);
+						}
+						grp.setPhoto(null);
+						groupService.update(grp);
+					}
+					String url = grp.getDelUrl();
+					if (url!=null) {
+						try{
+							File file = new File(url);//该文件所在的文件夹
+							DeleteFile.deleteFile(file);					
+						}catch(Exception e){}
+					}
+					groupService.delete(grp);
+				}
+			}
+			if(id!=null){
+				if(linShiGrp==null){
+					mav=new ModelAndView(LIST_ACTION);
+				}else{
+					mav= new ModelAndView("redirect:/picture/"+linShiGrp.getId()+"/view/s");
+					mav.addObject("backid", linShiGrp.getId());
+					
+				}
+			}else{
+				mav=new ModelAndView(LIST_ACTION);
+			}
+			redirect.addFlashAttribute(Constants.MESSAGE_NAME, "删除成功！");
+			this.writer("成功删除",request.getRemoteAddr(),this.getCurrentUser().getUsername());
+		}catch(Exception e){
+			e.printStackTrace();
+			redirect.addFlashAttribute("message", "删除失败！");
+		}
+		return mav;
+	}
+	
+	
+	/**
+	 * 审核照片
+	 * @author: lth
+	 * @creation: Oct 10, 2013 2:34:25 PM
+	 * @return: ModelAndView
+	 */
+	@RequestMapping("/approve")
+	public ModelAndView approve(HttpServletRequest request,HttpServletResponse response,Long[] spid,String spjg)throws Exception{
+		Photo r = new Photo();
+		for(Long id : spid){
+			r = photosService.getById(id);
+			r.setUser(userService.getById(this.getCurrentUser().getUsername()));
+			r.setStatus(spjg);
+			r.setApproveDate(DateUtil.getCuurentDate(new Date(), ""));
+			photosService.update(r);
+		}
+		return new ModelAndView(LIST_ACTION);
+	}
+	
+	@RequestMapping("/support")
+	public @ResponseBody String ajaxSelectTreat(HttpServletRequest request,HttpServletResponse response,Photo p)throws Exception{
+		try{
+			String id = request.getParameter("picId");
+			p = photosService.getById(Long.valueOf(id));
+			String sql = "select * from uf_ltx_goods where photo_id = "+id+" and user_sfzh = "+getCurrentUser().getUsername();
+			Goods g = goodsService.queryBySql(sql);
+			Integer count = 0;
+			if(g !=null){
+				return "-FAIL";
+			}else{
+				g = new Goods();
+				g.setPhoto(p);
+				g.setUser(userService.getById(this.getCurrentUser().getUsername()));
+				g.setCdate(DateUtil.getCuurentDate(new Date(), ""));
+				goodsService.save(g);
+				count = p.getCount();
+				if(count == null){
+					count = 0;
+				}
+				++count;
+				p.setCount(count);
+				photosService.update(p);
+			}
+	        return count.toString();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return "";
+	}
+}

@@ -1,0 +1,12 @@
+package cn.uuf.stu.ltx.grxx.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import cn.uuf.stu.framework.controller.BaseController;
+
+@Controller
+@RequestMapping("/ytx/grxx")
+public class GrxxController extends BaseController {
+	
+}

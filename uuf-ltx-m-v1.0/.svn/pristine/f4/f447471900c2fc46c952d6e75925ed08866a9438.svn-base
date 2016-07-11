@@ -1,0 +1,14 @@
+eclipse.preferences.version=1
+encoding//src.java.entity/cn/uuf/stu/entity/framework/BaseEntity.java=UTF-8
+encoding//src.java.entity/cn/uuf/stu/entity/framework/WResource.java=UTF-8
+encoding//src.java.entity/cn/uuf/stu/entity/framework/WRole.java=UTF-8
+encoding//src.java.framework/cn/uuf/stu/framework/common/CustomBusinessExceptionResolver.java=UTF-8
+encoding//src.java.framework/cn/uuf/stu/framework/common/ParamFilter.java=UTF-8
+encoding//src.java.framework/cn/uuf/stu/framework/controller/BaseController.java=UTF-8
+encoding//src.java.framework/cn/uuf/stu/framework/dao/IBaseDao.java=UTF-8
+encoding//src.java.framework/cn/uuf/stu/framework/dao/impl/BaseDaoImpl.java=UTF-8
+encoding//src.java.framework/cn/uuf/stu/framework/service/IBaseService.java=UTF-8
+encoding//src.java.framework/cn/uuf/stu/framework/service/impl/BaseServiceImpl.java=UTF-8
+encoding//src.java.framework/cn/uuf/stu/framework/util/SpringUtils.java=UTF-8
+encoding//webapp/ROOT/WEB-INF/page/admin/login/login.jsp=UTF-8
+encoding/<project>=UTF-8

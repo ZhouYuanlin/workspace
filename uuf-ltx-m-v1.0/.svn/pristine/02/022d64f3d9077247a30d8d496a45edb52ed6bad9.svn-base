@@ -1,0 +1,110 @@
+.anniushouye{
+	position: relative;
+	display: inline-block;
+	padding: 6px 12px;
+	margin-top: 15px;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	background-color: #ecf0f1;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	  touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	 -moz-user-select: none;
+	  -ms-user-select: none;
+	      user-select: none;
+	border: 1px solid #ecf0f1;
+	border-radius: 4px;
+}
+.anniushouyes{
+	color: #ffffff;
+	background-color: #BCD2EE;
+	border: 1px solid #BCD2EE;
+}
+.anniumoye{
+	position: relative;
+	display: inline-block;
+	padding: 6px 12px;
+	margin-top: 15px;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	background-color: #ecf0f1;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	  touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	 -moz-user-select: none;
+	  -ms-user-select: none;
+	      user-select: none;
+	border: 1px solid #ecf0f1;
+	border-radius: 4px;
+}
+.anniumoyes{
+	color: #ffffff;
+	background-color: #BCD2EE;
+	border: 1px solid #BCD2EE;
+}
+.pageup_nextye{
+	position: relative;
+	display: inline-block;
+	padding: 6px 12px;
+	margin-top:15px;
+	margin-left:8px;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	background-color: #ecf0f1;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	  touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	 -moz-user-select: none;
+	  -ms-user-select: none;
+	      user-select: none;
+	border: 1px solid #ecf0f1;
+	border-radius: 4px;
+}
+.pageup_nextyes{
+	color: #ffffff;
+	background-color: #CFCFCF;
+	border: 1px solid #CFCFCF;
+}
+
+.pagetotal_nextye{
+	position: relative;
+	display: inline-block;
+	padding: 6px 12px;
+	margin-top: 5px;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	background-color: #ecf0f1;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	  touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	 -moz-user-select: none;
+	  -ms-user-select: none;
+	      user-select: none;
+	border: 1px solid #ecf0f1;
+	border-radius: 4px;
+}
+.pagetotal_nextyes{
+	color: #ffffff;
+	background-color: #CFCFCF;
+	border: 1px solid #CFCFCF;
+}

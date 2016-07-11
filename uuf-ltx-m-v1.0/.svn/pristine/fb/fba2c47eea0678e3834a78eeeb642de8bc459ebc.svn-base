@@ -1,0 +1,41 @@
+.nav{ margin-bottom: 0;}     
+.nav-tabs>.active>a{ color: #777777;}
+.nav-tabs>li>a{  font-size: 15px; padding: 6px 25px; } 
+.form-vertical, .form-actions { margin-bottom: 0;}     
+.loginbox .main_input_box input{ box-shadow: 0px 0px 0px #888888;height:30px; display:inline-block; width:75%;  border: none; margin-bottom:3px; font-size: 16px; font-family: "微软雅黑";}
+.form-actions{ padding: 0; margin: 0; background: none; border-top: none;}   
+ttextarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input{box-shadow:0px 0px 0px rgba(0, 0, 0, 0.075) inset}
+ body{ color: #535353; font-family: "微软雅黑";} /*去掉默认*/ 
+ 
+ .tab-content{ box-shadow: 0px 3px 1px rgba(112,112,112,0.5);}
+.loginbox {width: 352px;position: absolute; right:18%;top:140px;} /*登录 宽*/   
+.loginbox .form-actions { padding: 32px 0;}  /*登录字*/   
+.main_input_box {  text-align:center}   /*图标居中 */   
+
+.controls{ position: relative;}
+.code{ position: absolute; right: 0px; top: 4px;}.code img{ cursor: pointer;}
+ .control-group{ padding:8px 0; border-bottom:1px solid #dadada; margin-bottom:0px;} /*input 行宽 */   
+.loginbox { text-align:left; font-size:17px; text-align:left;  line-height: 32px; }  /*标题字大小 */
+
+.frame_bann{width:100%;overflow:hidden;top:110px;left:0;}/*图片  */
+.frame_bann img{width:100%;display:block;min-height:432px; height: 432px;}/*bannr */
+
+.top_nav{ background:url(../../img/top_yead.jpg) repeat-x top left; line-height: 115px;height: 115px;}  /*top部*/
+
+.active_mide{ width: 64%;margin: 0 auto; height: 100%;}/*top部*/
+.active_mide{ border-top: 4px solid #134371;}/*top部*/
+
+.form_index{ background: #fff;padding: 0 30px;}   /*表单外 框 */
+.num_bor{ border:1px solid #aeafb1; padding: 0px 10px; border-radius: 2px;}
+
+.loadlogin{border-radius: 2px;-webkit-border-radius: 2px;width:100%;height:50px;
+	background-color: #e24d46;text-align:center;color:#fff;	text-shadow: 1px 1px 0 rgba(0,0,0,.2);line-height:50px;cursor:pointer;font-size:18px;letter-spacing:4px;border: none;}/*登录 按钮*/
+.loadlogin:active{background: #cf2820;}/*登录 按钮*/
+
+.footer{height:20px;width:100%;position: fixed;text-align:center;bottom:0;left: 0;padding-bottom: 20px;color: #91a0b3;font-size:13px;line-height: 40px; background:#f2f2f2;}/*脚  */
+    .oninput{
+	border-bottom:1px solid #787b84 ;
+	}/*焦点  */
+	._code{ text-align: center; background: #fff; padding-top: 50px ;}
+	._code img{ width: 200px;} 
+	.text_code{ font-size: 15px; color: #939496; line-height:60px;padding-bottom:10px ;}

@@ -1,0 +1,60 @@
+package cn.uuf.ltxxt.meetingRoom.service.impl;
+
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Service;
+
+import cn.uuf.domain.health.Rethoscard;
+import cn.uuf.domain.meetingroom.MeetingApply;
+import cn.uuf.ltxxt.meetingRoom.service.MeetingApplyService;
+import cn.uuf.support.dao.hibernate.impl.HibernateDaoSupport;
+@Service
+public class MeetingApplyServiceImpl extends HibernateDaoSupport<MeetingApply, Long> implements MeetingApplyService{
+	@Override
+	public Long getCount(MeetingApply m) {
+		Criteria criteria = buildCondition(m);
+		ProjectionList proList = Projections.projectionList();//设置投影集合
+		proList.add(Projections.property("id"));
+		criteria.setProjection(proList);
+		return this.getCount(criteria);
+	}
+
+	@Override
+	public List<MeetingApply> queryList(MeetingApply m, int s, int size) {
+		Criteria c = buildCondition(m);
+		c.setFirstResult(s).setMaxResults(size);
+		return c.list();
+	}
+	private Criteria buildCondition(MeetingApply m){
+		Criteria c = getSession().createCriteria(MeetingApply.class);
+		if(m != null){
+			if(m.getTitle() != null && m.getTitle().length() > 0)
+				c.add(Restrictions.like("title",m.getTitle(),MatchMode.ANYWHERE));
+			if(m.getApplicantName()!=null && m.getApplicantName().length()>0)
+				c.add(Restrictions.like("applicantName",m.getApplicantName(),MatchMode.ANYWHERE));
+		}
+		c.addOrder(Order.desc("useTime"));
+		return c;
+	}
+	
+	@Override
+	public List<MeetingApply> queryByMId(MeetingApply app) {
+		Criteria c = getSession().createCriteria(MeetingApply.class);
+		if(app!=null){
+			if(app.getMeetingRoom()!=null){
+				c.createAlias("meetingRoom","m");
+				if(app.getMeetingRoom().getId()!=null){
+					c.add(Restrictions.eq("m.id", app.getMeetingRoom().getId()));
+				}
+			}
+		}
+		return c.list();
+		
+	}
+}

@@ -1,0 +1,196 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%> 
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+    <link rel="stylesheet" href="${request.getContextPath}/resources/ytj/css/bootstrap.css"/>
+    <link rel="stylesheet" href="${request.getContextPath}/resources/ytj/css/style.css"/>
+    <link rel="stylesheet" href="${request.getContextPath}/resources/ytj/css/styles.css"/>
+</head>
+<body>
+<div class="all-baoguoone">
+    <div class="container head">
+        <img class="headimg" src="${request.getContextPath}/resources/ytj/images/logo.png" alt=""/>
+        <span class="headfont">离退休人员多功能触摸自助查询一体机</span>
+    </div>
+</div>
+<div class="container all-baoguothree">
+    <div class="row">
+        <div class="col-md-12 mt-10">
+            <div class="col-md-3 col-md-offset-1 text-left"><h4>用户名登录</h4></div>
+            <div class="col-md-2 col-md-offset-5 text-center"><h4>其他方式登录</h4></div>
+        </div>
+        <div class="col-md-12 mt-10 ">
+            <div class="col-md-7 col-md-offset-1 text-left">
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="username" placeholder="请输入用户名">
+                    </div>
+                    </form>
+            </div>
+            <div class="col-md-2 col-md-offset-1 text-center uu-zhiwen"><h4>指纹认证登录</h4></div>
+        </div>
+        <div class="col-md-12 mt-10">
+            <div class="col-md-7 col-md-offset-1 text-left">
+                <form>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="password" placeholder="请输入密码">
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2 col-md-offset-1 text-center uu-renlian"><h4>人脸识别登录</h4></div>
+        </div>
+        <div class="col-md-12 mt-10">
+            <div onclick="login()" style="cursor:pointer" class="col-md-7 col-md-offset-1 text-center uu-denglu"><h5>登录</h5></div>
+            <div class="col-md-2 col-md-offset-1 text-center uu-yika"><h4>一卡通登录</h4></div>
+        </div>
+        <div class="col-md-12 mt-10">
+            <div class="col-md-10 col-md-offset-1">
+                <div id="keyboard" class="col-md-12">
+                    <ul>
+                        <li><a href="#" class="key c27 fn"><span id="esc">esc</span></a></li>
+                        <li><a href="#" class="key c112 fn"><span>F1</span></a></li>
+                        <li><a href="#" class="key c113 fn"><span>F2</span></a></li>
+                        <li><a href="#" class="key c114 fn"><span>F3</span></a></li>
+                        <li><a href="#" class="key c115 fn"><span>F4</span></a></li>
+                        <li><a href="#" class="key c116 fn"><span>F5</span></a></li>
+                        <li><a href="#" class="key c117 fn"><span>F6</span></a></li>
+                        <li><a href="#" class="key c118 fn"><span>F7</span></a></li>
+                        <li><a href="#" class="key c119 fn"><span>F8</span></a></li>
+                        <li><a href="#" class="key c120 fn"><span>F9</span></a></li>
+                        <li><a href="#" class="key c121 fn"><span>F10</span></a></li>
+                        <li><a href="#" class="key c122 fn"><span>F11</span></a></li>
+                        <li><a href="#" class="key c123 fn"><span>F12</span></a></li>
+                        <li><a href="#" class="key fn"><span>Eject</span></a></li>
+                    </ul>
+                    <ul id="numbers">
+                        <li><a href="#" class="key c192"><b>~</b><span>`</span></a></li>
+                        <li><a href="#" class="key c49"><b>!</b><span>1</span></a></li>
+                        <li><a href="#" class="key c50"><b>@</b><span>2</span></a></li>
+                        <li><a href="#" class="key c51"><b>#</b><span>3</span></a></li>
+                        <li><a href="#" class="key c52"><b>$</b><span>4</span></a></li>
+                        <li><a href="#" class="key c53"><b>%</b><span>5</span></a></li>
+                        <li><a href="#" class="key c54"><b>^</b><span>6</span></a></li>
+                        <li><a href="#" class="key c55"><b>&amp;</b><span>7</span></a></li>
+                        <li><a href="#" class="key c56"><b>*</b><span>8</span></a></li>
+                        <li><a href="#" class="key c57"><b>(</b><span>9</span></a></li>
+                        <li><a href="#" class="key c48"><b>)</b><span>0</span></a></li>
+                        <li><a href="#" class="key c189 alt"><b>_</b><span>-</span></a></li>
+                        <li><a href="#" class="key c187"><b>+</b><span>=</span></a></li>
+                        <li><a href="#" class="key c46" id="delete"><span>Delete</span></a></li>
+                    </ul>
+                    <ul id="qwerty">
+                        <li><a href="#" class="key c9" id="tab"><span>tab</span></a></li>
+                        <li><a href="#" class="key c81"><span>q</span></a></li>
+                        <li><a href="#" class="key c87"><span>w</span></a></li>
+                        <li><a href="#" class="key c69"><span>e</span></a></li>
+                        <li><a href="#" class="key c82"><span>r</span></a></li>
+                        <li><a href="#" class="key c84"><span>t</span></a></li>
+                        <li><a href="#" class="key c89"><span>y</span></a></li>
+                        <li><a href="#" class="key c85"><span>u</span></a></li>
+                        <li><a href="#" class="key c73"><span>i</span></a></li>
+                        <li><a href="#" class="key c79"><span>o</span></a></li>
+                        <li><a href="#" class="key c80"><span>p</span></a></li>
+                        <li><a href="#" class="key c219 alt"><b>{</b><span>[</span></a></li>
+                        <li><a href="#" class="key c221 alt"><b>}</b><span>]</span></a></li>
+                        <li><a href="#" class="key c220 alt"><b>|</b><span>\</span></a></li>
+                    </ul>
+                    <ul id="asdfg">
+                        <li><a href="#" class="key c20 alt" id="caps"><b></b><span>caps lock</span></a></li>
+                        <li><a href="#" class="key c65"><span>a</span></a></li>
+                        <li><a href="#" class="key c83"><span>s</span></a></li>
+                        <li><a href="#" class="key c68"><span>d</span></a></li>
+                        <li><a href="#" class="key c70"><span>f</span></a></li>
+                        <li><a href="#" class="key c71"><span>g</span></a></li>
+                        <li><a href="#" class="key c72"><span>h</span></a></li>
+                        <li><a href="#" class="key c74"><span>j</span></a></li>
+                        <li><a href="#" class="key c75"><span>k</span></a></li>
+                        <li><a href="#" class="key c76"><span>l</span></a></li>
+                        <li><a href="#" class="key c186 alt"><b>:</b><span>;</span></a></li>
+                        <li><a href="#" class="key c222 alt"><b>"</b><span>'</span></a></li>
+                        <li><a href="#" class="key c13 alt" id="enter"><span>return</span></a></li>
+                    </ul>
+                    <ul id="zxcvb">
+                        <li><a href="#" class="key c16 shiftleft"><span>Shift</span></a></li>
+                        <li><a href="#" class="key c90"><span>z</span></a></li>
+                        <li><a href="#" class="key c88"><span>x</span></a></li>
+                        <li><a href="#" class="key c67"><span>c</span></a></li>
+                        <li><a href="#" class="key c86"><span>v</span></a></li>
+                        <li><a href="#" class="key c66"><span>b</span></a></li>
+                        <li><a href="#" class="key c78"><span>n</span></a></li>
+                        <li><a href="#" class="key c77"><span>m</span></a></li>
+                        <li><a href="#" class="key c188 alt"><b>&lt;</b><span>,</span></a></li>
+                        <li><a href="#" class="key c190 alt"><b>&gt;</b><span>.</span></a></li>
+                        <li><a href="#" class="key c191 alt"><b>?</b><span>/</span></a></li>
+                        <li><a href="#" class="key c16 shiftright"><span>Shift</span></a></li>
+                    </ul>
+                    <ul id="bottomrow">
+                        <li><a href="#" class="key" id="fn"><span>fn</span></a></li>
+                        <li><a href="#" class="key c17" id="control"><span>control</span></a></li>
+                        <li><a href="#" class="key option" id="optionleft"><span>option</span></a></li>
+                        <li><a href="#" class="key command" id="commandleft"><span>command</span></a></li>
+                        <li><a href="#" class="key c32" id="spacebar"></a></li>
+                        <li><a href="#" class="key command" id="commandright"><span>command</span></a></li>
+                        <li><a href="#" class="key option" id="optionright"><span>option</span></a></li>
+                        <ol>
+                            <li><a href="#" class="key c37" id="left"><span>&#x25C0;</span></a></li>
+                            <li>
+                                <a href="#" class="key c38" id="up"><span>&#x25B2;</span></a>
+                                <a href="#" class="key c40" id="down"><span>&#x25BC;</span></a>
+                            </li>
+                            <li><a href="#" class="key c39" id="right"><span>&#x25B6;</span></a></li>
+                        </ol>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 mt-20"></div>
+</div>
+</body>
+<script type="text/javascript" src="${request.getContextPath}/resources/ytj/js/jquery-1.11.2.min.js"></script>
+<script>
+function login(){
+	var username = $("#username").val();
+	var password = $("#password").val();
+	if(username==null&&username==''){
+		alert("用户名不能为空");
+		return false;
+	}
+	
+	if(password==null&&password==''){
+		alert("密码不能为空");
+		return false;
+	}
+	
+	$.post("/login/submit?" + (new Date()).getTime(), {
+		username : username,
+		password : password
+	}, function(result) {
+		if(result.type=='error'){
+			alert(result.content);
+		}
+		if(result.type=='success'){
+			setTimeout(function(){
+		           window.location.href="/ytj/index"; 
+		     },2000)
+		}
+	});
+}
+
+
+    $(window).keydown(function (e) {
+        key = e.keyCode ? e.keyCode : e.which;
+        $('.key.c' + key).addClass('keydown');
+        console.log(key);
+    });
+    $(window).keyup(function (e) {
+        key = e.keyCode ? e.keyCode : e.which;
+        $('.key.c' + key).removeClass('keydown');
+    });
+</script>
+</html>

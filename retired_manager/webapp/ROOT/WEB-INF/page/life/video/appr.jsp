@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://www.uufocus.com/taglib" prefix="s"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title> 
+
+</head>
+<body>
+<link rel="stylesheet" href="${request.contextPath}/defaults/css/style.css" type="text/css"/>
+
+<form id="frm" action="" class="form-horizontal">
+<div class="page-content-wrapper">
+		<div class="page-content">
+			<div class="row">
+				<div class="col-md-12">
+					<ul class="page-breadcrumb breadcrumb">
+						<li>
+							<i class="fa fa-home"></i>
+							<a href="/video">
+							首页 </a>
+							<i class="fa fa-angle-right"></i>
+						</li>
+						<li> 
+							<a href="/video">
+							视频分享</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 clearfix">
+                <div class="operation-btn pull-right">
+					<a class="btn blue" href="<c:url value='${request.contextPath}/video/create'/>"><i class="fa fa-plus"></i> 上传视频</a>
+                	<a class="btn blue" id = "ch"><i class="icon-plus icon-white"></i>全选</a>
+                    <a class="btn blue" href="javascript:void(0)" onclick="doDel();"><i class="fa fa-times"></i> 删除</a>
+                </div>
+              </div>
+              </div>
+
+				<div style="background-color:#e5e5e5;min-height:400px;overflow:hidden;">
+				<ul class="shenhetupian">
+					<c:forEach items="${list}" var="item" varStatus="c">
+					<li class="danzhangtupian">
+				    	<table>
+				        	<tr>
+				    			<td>
+				                		<a href="#" target="_blank">
+				                		<c:if test="${empty item.slUrl}"><img class="suolietu" src="${request.contextPath}/defaults/img/video/default.jpg"/></c:if>
+				                    	<c:if test="${!empty item.slUrl}"><img class="suolietu" src="${item.slUrl }" /></c:if>
+				                        </a>
+				                </td>
+				        	</tr>
+				        </table>
+				        <input id="id${c.index}" name="id" value="${item.id}" class="checkboxes" style="display:block;float:left;margin-left:5px;margin-top:3px;" type="checkbox" />
+				        <span style="margin-right:0px"><s:substring length="7" value="${item.title}"/></span>
+				        <span><fmt:formatDate value = "${item.cdate}" pattern ="yyyy-MM-dd"/></span>
+				    </li>
+				    </c:forEach>
+				</ul>
+				</div>
+		</div>
+	</div>
+</form>
+<script>
+				//删除
+				function doDel(){
+					if(fnremove()){
+						var frm = document.getElementById('frm');
+						frm.action = "${request.contextPath}/video/del";
+						frm.submit();
+					}
+				}
+				
+				$("#ch").click(
+						function(){
+							$('.checkboxes').each(function(){
+								if(this.checked){
+									$(this).prop('checked',false);
+								}else{
+									$(this).prop('checked',true);
+								}
+							});
+						}
+					);
+			</script>
+			
+</body>
+</html>

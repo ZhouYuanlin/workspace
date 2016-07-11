@@ -1,0 +1,59 @@
+/* 前台首页 */
+.front-end .header .navbar-inner {height:80px}
+.fixed-top.front-end .page-container {margin-top: 80px; *padding-top: 80px;}
+.front-end .navbar .brand { font-size:24px;margin-top:15px}
+.portal-page .page-content {margin-left:0px}
+
+.dashboard-stat .more i {*float:none;}
+.portal-page .dashboard-stat .more {font-size:14px; color:#fff;opacity: 1;}
+.portal-page .dashboard-stat .more:hover {opacity:0.7;}
+.site-search { position:absolute;top:45px;right:20px}
+.site-search input.m-wrap {width:150px;height:20px!important;*margin-top:-3px;padding:0px 0px !important;border:1px solid #fff;background-color:#fff!important;}
+.site-search a.btn {height:12px;padding:5px 5px;margin-top:-2px;margin-left:-5px;background-color:#fff!important;}
+.site-search a.btn i {vertical-align:text-top}
+
+.portal-page .dashboard-stat .visual {width:50px; height:50px;margin-bottom:10px;}
+.portal-page .dashboard-stat .visual i {font-size: 50px;}
+.portal-page .dashboard-stat .details {width:70%;margin-bottom:10px;padding-right:0px;}
+.portal-page .dashboard-stat .details .number {font-size:30px;}
+.portal-page .dashboard-stat .details .desc {font-size:14px;}
+
+.media-txt {color:#666;}
+.user-photo {width:120px;height:120px;margin-top:20px;margin-right:10px;}
+.user-photo img {width:120px;height:120px;border-radius:225px !important;overflow:hidden;}
+.media-body h4 {margin-top:40px;}
+
+
+body.page-portal {/*background: url(../img/bg.jpg) center 0 no-repeat !important;*/
+background-color: #f5f5f5!important;
+background-attachment: fixed!important;}
+.page-hidden-breadcrumb.page-portal .page-content-wrapper {background-color:inherit;}
+.page-hidden-breadcrumb.page-portal .page-content {background-color:inherit;}
+body.page-portal .ulist {padding:0px 5px;}
+.ulist li { overflow:hidden;}
+.ulist .newsTitle {float:left;}
+.ulist .pubDate { float:right; color:#999;}
+.portal-set-body .form-actions {padding:10px; text-align:center;}
+#portal-set { height:0px; overflow:hidden;}
+
+.list-group {margin-bottom: 10px;}
+.list-group-item:first-child {
+/*border-top-right-radius: 5px!important;
+border-top-left-radius: 5px!important;*/
+}
+.list-group-item:last-child {
+/*border-bottom-right-radius: 5px!important;
+border-bottom-left-radius: 5px!important;*/
+}
+.list-group-item { font-size:15px;padding: 8px 15px;}
+.conMod {padding:10px;}
+.newsHead span {margin-right:20px;}
+.newsCon p { font-size:15px; text-indent:2em;}
+
+.media h3,.post-comment h3 { font-size:18px;}
+.media-heading {font-size:14px; color:#999;}
+.media i {color:#999;}
+.media { }
+.tiles .tile {height: auto !important;width: 46.5% !important;font-weight: 300;font-size: 12px;line-height: 20px;margin: 0 10px 10px 0;}
+.tiles .tile .tile-body > i {margin-top: 7px;font-size: 48px;line-height: 56px;}
+.tiles .tile .tile-object > .name {font-size: 14px;}

@@ -1,0 +1,121 @@
+@font-face {font-family: 'people';
+    src: url('../fontface/iconfont.eot'); /* IE9*/
+    src: url('../fontface/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../fontface/iconfont.woff') format('woff'), /* chrome��firefox */
+    url('../fontface/iconfont.ttf') format('truetype')/* chrome��firefox��opera��Safari, Android, iOS 4.2+*/ ; /* iOS 4.1- */
+}
+.tj-nvfarm>ul>li,.tj-nanfarm>ul>li{
+    list-style: none;
+    float: left;
+}
+.fl{
+    float: left;
+}
+.tj-headone{
+    /*outline: 1px solid red;*/
+    height: 40px;
+	font-size:10px;
+    color: white;
+    line-height: 40px;
+    text-align: center;
+    background-color: #61cc5a;
+}
+.tj-headtwo{
+    height: 40px;
+    font-size:14px;
+}
+.tj-headtwo-a,.tj-headtwo-b{
+    text-align: center;
+    line-height: 40px;
+    font-size:10px;
+    width:0px;
+}
+.tj-headtwo-a,{
+	transition: width .2s;
+	-moz-transition: width .2s;	
+	-webkit-transition: width .2s;
+	-o-transition: width .2s;
+}
+.tj-headtwo-b{
+	transition: width .7s;
+	-moz-transition: width .7s;	
+	-webkit-transition: width .7s;
+	-o-transition: width .7s;
+}
+.mt{
+    margin-top: 30px;
+    /*outline: 1px solid red;*/
+}
+.tj-twofream{
+    height: 180px;
+    font-size: 15px;
+    font-weight: 700;
+    /*line-height: 180px;*/
+}
+.tj-twoa{
+    line-height: 180px;
+    text-align: center;
+    font-size:15px;
+}
+.tj-twob, .tj-twoc, .tj-twod{
+
+}
+
+.tj-twob-nv, .tj-twob-nan{
+     font-family: people;
+    height: 90px;
+    /*outline: 1px solid grey;*/
+    color: rgb(216,216,216);
+ }
+.tj-nvfarm>ul{
+    /*outline: 1px solid royalblue;*/
+    width: 100%;
+}
+.tj-nvfarm>ul>li{
+    font-size: 45px;
+    line-height: 90px;
+    width: 21px;
+    margin-left: -3px;
+}
+.tj-nvword p:nth-child(1){
+    font-size: 15px;
+    text-align: center;
+    color:rgb(250,63,148);
+    margin-top: 18px;
+}
+.tj-nvword p:nth-child(2){
+    font-size: 12px;
+    text-align: center;
+    color:rgb(250,63,148);
+    margin-top: -5px;
+}
+.tj-nanword p:nth-child(1){
+    font-size: 15px;
+    text-align: center;
+    color:#3c94cd;
+    margin-top: 18px;
+}
+.tj-nanword p:nth-child(2){
+    font-size: 12px;
+    text-align: center;
+    color:#3c94cd;
+    margin-top: -5px;
+}
+.tj-nanfarm>ul{
+    /*outline: 1px solid royalblue;*/
+    width: 100%;
+}
+.tj-nanfarm>ul>li{
+    font-size: 45px;
+    line-height: 90px;
+    width: 21px;
+    margin-left: -3px;
+}
+.tj-threefream{
+    height: 180px;
+    font-size: 16px;
+    font-weight: 700;
+}
+.tj-three-b,.tj-three-c, .tj-three-d{
+    height: 180px;
+}

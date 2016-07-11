@@ -1,0 +1,8 @@
+package cn.uuf.wechat.connect.dao;
+
+import cn.uuf.domain.User;
+import cn.uuf.stu.framework.dao.IBaseDao;
+
+public interface IUserDao extends IBaseDao<User, Long>{
+
+}

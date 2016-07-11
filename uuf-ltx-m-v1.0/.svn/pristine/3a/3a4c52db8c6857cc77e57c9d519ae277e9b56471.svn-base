@@ -1,0 +1,83 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>账号管理</title>
+    <link rel="stylesheet" type="text/css" href="${request.getContextPath}/resources/wechat/css/aui.css" />
+    <script type="text/javascript" src="${request.getContextPath}/resources/wechat/script/api.js" ></script>
+	<script src="${request.getContextPath}/resources/framework/custom/base/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+	<style type="text/css">
+	p{
+		text-align: right;
+	}
+	</style>
+</head>
+<body>
+	<header class="aui-bar aui-bar-nav aui-bar-dark">
+	    <div class="aui-title">密码重置</div>
+	</header>
+    <div class="aui-card aui-noborder">       
+    </div>
+   <form id="pwdresetForm" action="<c:url value='${request.contextPath}/wechat/personal/repwd?openId=${openId}'/>" method="post">
+    <div class="aui-card">
+        <div class="aui-form">
+            <div class="aui-input-row"  style="margin-left: 15px;">
+                <span class="aui-input-addon">用户名:</span>
+                <p><input type="text" class="aui-input" placeholder="证件号为空" value="${account.username}" readonly="readonly"/></p>
+            </div>
+            <div class="aui-input-row" style="margin-left: 28px;">
+                <span class="aui-input-addon">姓名:</span>
+                <p><input type="text" class="aui-input" placeholder="姓名为空" value="${account.realname}" readonly="readonly"/></p>
+            </div>
+            <div class="aui-input-row" style="margin-left: 28px;">
+                <span class="aui-input-addon">密码:</span>
+                <input type="password" id="pwd" name="password" class="aui-input" placeholder="请输入密码"/>
+            </div>
+            <div class="aui-input-row">
+                <span class="aui-input-addon">确认密码:</span>
+                <input type="password" id="rpwd" class="aui-input" placeholder="请输入要绑定的手机号"/>
+            </div>
+            <div class="aui-btn-row" onclick="return doRepwd();">
+                <div class="aui-btn aui-btn-block aui-btn-success">提交</div>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+<script type="text/javascript">
+ 	var regis = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$";
+	function doRepwd(){
+		var pwd = $('#pwd').val().trim();
+		var rpwd = $('#rpwd').val();
+		if(pwd.length==0){
+			alert("密码不能为空!");
+			$('#pwd').val('');
+			$('#pwd').focus();
+			return false;
+		}
+		if(rpwd.length==0 || pwd!=rpwd){
+			alert("两次密码输入不匹配!");
+			$('#pwd').val('');
+			$('#rpwd').val('');
+			$('#pwd').focus();
+			return false;
+		}
+		if(pwd.length!=0 && rpwd.length!=0 && pwd==rpwd){
+			var pass = pwd.match(regis);
+			if(pass==null){
+				alert("密码必须由字母和数字组合且长度为6-16位!");
+				$('#pwd').val('');
+				$('#rpwd').val('');
+				$('#pwd').focus();
+				return false;
+			}
+		}
+		$('#pwdresetForm').attr('action','${request.contextPath}/wechat/personal/repwd?openId=${openId}').submit();
+	}
+</script>
+</html>

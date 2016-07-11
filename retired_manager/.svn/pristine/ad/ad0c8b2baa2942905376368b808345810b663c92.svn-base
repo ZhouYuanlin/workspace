@@ -1,0 +1,198 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+	<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h3>自定义导出</h3>
+  </div>
+  <div class="modal-body">
+	<div class="form-body">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="row">
+					<div class="row">
+						<div class="col-md-16">
+							<div class="form-group">
+								<div class="controls">
+									<div class="row">
+										<div class="btn-group btn-group-custom" data-toggle="buttons">
+											<label class="btn active">
+												<input name="list[0].gzzh" checked="checked" value="xm" type="checkbox">
+												姓名
+												<input name="list[0].lxdh" value="姓名" type="hidden">
+											</label>
+											<label class="btn active">
+												<input name="list[1].gzzh" checked="checked" value="sfzh" type="checkbox">
+												身份证号码
+												<input name="list[1].lxdh" value="身份证号码" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[2].gzzh" value="ltxf" type="checkbox">
+												离退休费
+												<input name="list[2].lxdh" value="离退休费" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[3].gzzh" value="shb" type="checkbox">
+												生活补
+												<input name="list[3].lxdh" value="生活补" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[4].gzzh" value="jt" type="checkbox">
+												交通补
+												<input name="list[4].lxdh" value="交通补" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[5].gzzh" value="lxdh" type="checkbox">
+												联系电话
+												<input name="list[5].lxdh" value="联系电话" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[6].gzzh" value="sbf" type="checkbox">
+												书报费
+												<input name="list[6].lxdh" value="书报费" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[7].gzzh" value="xl" type="checkbox">
+												洗理费
+												<input name="list[7].lxdh" value="洗理费" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[8].gzzh" value="hl" type="checkbox">
+												护理费
+												<input name="list[8].lxdh" value="护理费" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[9].gzzh" value="zgf" type="checkbox">
+												自雇费
+												<input name="list[9].lxdh" value="自雇费" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[10].gzzh" value="qt" type="checkbox">
+												其他费用
+												<input name="list[10].lxdh" value="其他费用" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[11].gzzh" value="qtbt" type="checkbox">
+												其他补贴
+												<input name="list[11].lxdh" value="其他补贴" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[12].gzzh" value="bgz" type="checkbox">
+												补工资
+												<input name="list[12].lxdh" value="补工资" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[13].gzzh" value="yfxj" type="checkbox">
+												应发小计
+												<input name="list[13].lxdh" value="应发小计" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[14].gzzh" value="gkxj" type="checkbox">
+												扣款小计
+												<input name="list[14].lxdh" value="扣款小计" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[15].gzzh" value="sfxj" type="checkbox">
+												实发小计
+												<input name="list[15].lxdh" value="实发小计" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[16].gzzh" value="yf" type="checkbox">
+												发放月份
+												<input name="list[16].lxdh" value="发放月份" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[17].gzzh" value="ffsj" type="checkbox">
+												发放时间
+												<input name="list[17].lxdh" value="发放时间" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[18].gzzh" value="bjjbt.lxbt" type="checkbox">
+												离休补贴
+												<input name="list[18].lxdh" value="离休补贴" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[19].gzzh" value="bjjbt.wybt" type="checkbox">
+												物业补贴
+												<input name="list[19].lxdh" value="物业补贴" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[20].gzzh" value="bjjbt.bcbt" type="checkbox">
+												班车补贴
+												<input name="list[20].lxdh" value="班车补贴" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[21].gzzh" value="bjjbt.tzbt" type="checkbox">
+												提租补贴
+												<input name="list[21].lxdh" value="提租补贴" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[22].gzzh" value="bjjbt.sdbt" type="checkbox">
+												适当补贴
+												<input name="list[22].lxdh" value="适当补贴" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[23].gzzh" value="bjjbt.tt" type="checkbox">
+												特贴
+												<input name="list[23].lxdh" value="特贴" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[24].gzzh" value="bjjbt.wxy" type="checkbox">
+												未休养补
+												<input name="list[24].lxdh" value="未休养补" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[25].gzzh" value="bjjbt.yfhj" type="checkbox">
+												津补贴应发额
+												<input name="list[25].lxdh" value="应发合计" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[26].gzzh" value="bjjbt.dh" type="checkbox">
+												代汇
+												<input name="list[26].lxdh" value="代汇" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[27].gzzh" value="bjjbt.kkhj" type="checkbox">
+												津补贴应扣额
+												<input name="list[27].lxdh" value="扣款合计" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[28].gzzh" value="bjjbt.ffsj" type="checkbox">
+												津补发放时间
+												<input name="list[28].lxdh" value="津补贴发放时间" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[29].gzzh" value="bjjbt.ffyf" type="checkbox">
+												津补发放月份
+												<input name="list[29].lxdh" value="津补发放月份" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[30].gzzh" value="bjjbt.sfgz" type="checkbox">
+												津补贴实发额
+												<input name="list[30].lxdh" value="津补贴实发额" type="hidden">
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn blue mgr10 expdata" data-dismiss="modal" aria-hidden="true">导出</button>
+		<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+	</div>
+	</div>
+<script>
+	$(function(){
+		$('.expdata').click(function(){
+			$('#frm').attr('action','${request.contextPath}/retwages/isFreeExport').submit();
+		});
+	});
+</script>

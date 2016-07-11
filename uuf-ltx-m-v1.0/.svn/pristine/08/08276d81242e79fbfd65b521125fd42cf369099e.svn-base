@@ -1,0 +1,19 @@
+package cn.uuf.wechat.connect.service.impl;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import cn.uuf.stu.entity.wx.WAccountAssociation;
+import cn.uuf.stu.framework.service.impl.BaseServiceImpl;
+import cn.uuf.wechat.connect.dao.IWAccountAsscociationDao;
+import cn.uuf.wechat.connect.service.IWAccountAsscociationService;
+@Service
+public class WAccountAsscociationServiceImpl extends BaseServiceImpl<WAccountAssociation, Long> implements IWAccountAsscociationService {
+
+	@Resource
+	public void setBaseDao(IWAccountAsscociationDao baseDao) {
+		super.setBaseDao(baseDao);
+	}
+	
+}

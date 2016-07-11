@@ -1,0 +1,64 @@
+package cn.uuf.stu.entity.wx;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import cn.uuf.stu.entity.framework.BaseEntity;
+
+/**
+ * 微信openid关联表
+* <p>标题：WAccountAssociation</p>
+* <p>简介：</p>
+* @author tl
+* @date 2016年5月17日 下午3:57:25
+ */
+@Entity
+@Table(name="uuf_wx_account_openid")
+public class WAccountAssociation extends BaseEntity{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6348102464874674672L;
+	private String username;
+	private String lxdh;
+	private String gzzh;
+	private String openId;
+	private String password;
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getLxdh() {
+		return lxdh;
+	}
+	public void setLxdh(String lxdh) {
+		this.lxdh = lxdh;
+	}
+	public String getGzzh() {
+		return gzzh;
+	}
+	public void setGzzh(String gzzh) {
+		this.gzzh = gzzh;
+	}
+	public String getOpenId() {
+		return openId;
+	}
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+	
+	@Transient
+	public String getPassword() {
+		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	
+}

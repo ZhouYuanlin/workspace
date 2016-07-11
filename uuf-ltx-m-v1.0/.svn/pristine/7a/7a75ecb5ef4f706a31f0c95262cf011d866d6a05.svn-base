@@ -1,0 +1,9 @@
+package cn.uuf.wechat.connect.dao;
+
+import cn.uuf.stu.entity.wx.WAccountAssociation;
+import cn.uuf.stu.framework.dao.IBaseDao;
+
+
+public interface IWAccountAsscociationDao extends IBaseDao<WAccountAssociation, Long>{
+
+}

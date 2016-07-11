@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd   
+    http://www.springframework.org/schema/util 
+    http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+	<description>Shiro 配置</description>
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/auth/login" /><!-- 这个地方让打印跳转了登陆 -->
+		<property name="successUrl" value="/" />
+		<property name="unauthorizedUrl" value="/auth/login" />
+		<property name="filters">  
+	         <util:map>  
+	             <entry key="kickout" value-ref="kickoutSessionFilter"/>  
+	         </util:map>  
+	    </property>
+		<property name="filterChainDefinitions">
+			<value>
+				/auth* = anon
+				/admin/upload/swfupload* = anon
+				/auth/main = anon
+				/auth/logout = anon
+				/defaults/css/** = anon
+				/defaults/js/** = anon
+				/defaults/img/** = anon
+				/defaults/plugins/** = anon
+				/defaults/layouts/** = anon
+				/upload/images/** = anon
+				/** = kickout,authc
+			</value>
+		</property>
+	</bean>
+	
+	<bean id="kickoutSessionFilter" class="cn.uuf.filter.KickoutSessionFilter">  
+	    <property name="cacheManager" ref="cacheManager"/>  
+	    <property name="sessionManager" ref="sessionManager"/>  
+	    <property name="kickoutAfter" value="false"/>  
+	    <property name="kickoutUrl" value="/auth/login?kickout=1"/>  
+	</bean>
+
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="cacheManager" ref="cacheManager"/>
+		<!--设置自定义realm -->
+		<property name="realm" ref="ltxRealm" />
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<!--自定义Realm 继承自AuthorizingRealm -->
+	<bean id="ltxRealm" class="cn.uuf.security.LtxRealm">
+		<property name="credentialsMatcher" ref="loginLimitMatcher"/>
+	</bean>
+	
+	<bean id="loginLimitMatcher" class="cn.uuf.security.LoginLimitMatcher"/>
+	
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"/>
+	
+	
+	<!-- securityManager -->
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod"
+			value="org.apache.shiro.SecurityUtils.setSecurityManager" />
+		<property name="arguments" ref="securityManager" />
+	</bean>
+
+	<!-- Enable Shiro Annotations for Spring-configured beans. Only run after -->
+	<!-- the lifecycleBeanProcessor has run: -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor" />
+		
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<property name="sessionDAO" ref="sessionDAO"/>
+		<property name="sessionValidationInterval" value="1800000"/>  <!-- 相隔多久检查一次session的有效性 -->
+		<property name="deleteInvalidSessions" value="true"/>
+	    <property name="sessionValidationSchedulerEnabled" value="true"/>  
+	    <property name="sessionIdCookieEnabled" value="true"/>
+		<property name="globalSessionTimeout" value="1800000"/>  <!-- session 有效时间为半小时 （毫秒单位）-->
+		<property name="sessionIdCookie.name" value="ltxrealm"/>
+		<property name="sessionIdCookie.path" value="/"/>
+		<property name="sessionIdCookie.httpOnly" value="true"/>
+	</bean>
+
+	<bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.MemorySessionDAO" />
+
+</beans>

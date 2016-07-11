@@ -2,13 +2,13 @@
 <section name="Workbench">
 	<section name="org.eclipse.jdt.debug.ui.MAIN_METHOD_SELECTION_DIALOG">
 		<item value="true" key="ShowStatusLine"/>
-		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0A;&lt;History&gt;&#x0A;&lt;historyRootNode&gt;&#x0A;&lt;infoNode&gt;=FileSystemCat/\/Users\/mumutongxue\/Documents\/实训\/1-7天笔记+源码\/1-7天笔记+源码\/1第一天笔记\/hadoop-2.2.0\/share\/hadoop\/common\/lib\/mockito-all-1.8.5.jar&amp;lt;org.mockito.asm.util(ASMifierClassVisitor.class[ASMifierClassVisitor&lt;/infoNode&gt;&#x0A;&lt;/historyRootNode&gt;&#x0A;&lt;/History&gt;" key="History"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0A;&lt;History&gt;&#x0A;&lt;historyRootNode&gt;&#x0A;&lt;infoNode&gt;=FileSystemCat/\/Users\/mumutongxue\/Documents\/实训\/1-7天笔记+源码\/1-7天笔记+源码\/1第一天笔记\/hadoop-2.2.0\/share\/hadoop\/common\/lib\/mockito-all-1.8.5.jar&amp;lt;org.mockito.asm.util(ASMifierClassVisitor.class[ASMifierClassVisitor&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=KWCentralized/\/KWCentralized\/lib\/nlp-lang-0.3.jar&amp;lt;org.nlpcn.commons.lang.util(AnsjArrays.class[AnsjArrays&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=test1/\/Users\/mumutongxue\/Documents\/httpcomponents-core-4.4.4\/lib\/httpcore-ab-4.4.4.jar&amp;lt;org.apache.http.benchmark(HttpBenchmark.class[HttpBenchmark&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=test1/src&amp;lt;test1{draw.java[draw&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=test1/src&amp;lt;com.stock.netdata{file.java[file&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=test1/src&amp;lt;test1{myspider.java[myspider&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=test1/src&amp;lt;test1{stockUI.java[stockUI&lt;/infoNode&gt;&#x0A;&lt;/historyRootNode&gt;&#x0A;&lt;/History&gt;" key="History"/>
 		<section name="DialogBoundsSettings">
-			<item value="600" key="DIALOG_WIDTH"/>
+			<item value="617" key="DIALOG_WIDTH"/>
 			<item value="64" key="DIALOG_Y_ORIGIN"/>
-			<item value="500" key="DIALOG_HEIGHT"/>
+			<item value="450" key="DIALOG_HEIGHT"/>
 			<item value="340" key="DIALOG_X_ORIGIN"/>
-			<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
+			<item value="1|.SF NS Text|11.0|0|COCOA|1|.SFNSText-Regular" key="DIALOG_FONT_NAME"/>
 		</section>
 	</section>
 </section>

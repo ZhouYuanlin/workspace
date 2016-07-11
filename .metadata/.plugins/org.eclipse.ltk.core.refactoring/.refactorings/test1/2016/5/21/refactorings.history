@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Convert local variable &apos;test1.SimpleFrame.calFarthest().maxPoint&apos; in &apos;test1.SimpleFrame.calFarthest()&apos; to field&#x0A;- Original project: &apos;test1&apos;&#x0A;- Original element: &apos;test1.SimpleFrame.calFarthest().maxPoint&apos;&#x0A;- Field name: &apos;maxPoint&apos;&#x0A;- Initialize field in method&#x0A;- Declared visibility: &apos;private&apos;" description="Convert local variable &apos;maxPoint&apos; to field" final="false" flags="2" id="org.eclipse.jdt.ui.promote.temp" initialize="1" input="/src&lt;test1{draw.java" name="maxPoint" selection="28662 15" stamp="1463707902270" static="false" version="1.0" visibility="2"/>
+</session>

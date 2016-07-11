@@ -1,0 +1,156 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+	<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h3>自定义导出</h3>
+  </div>
+  <div class="modal-body">
+	<div class="form-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<div style="margin-left: 30px;margin-top: 20px;" class="btn-group btn-group-custom" data-toggle="buttons">
+											<label class="btn active">
+												<input name="list[0].gzzh" checked="checked" value="sfzh" type="checkbox">
+												身份证号
+												<input name="list[0].lxdh" value="身份证号" type="hidden">
+											</label>
+											<label class="btn active">
+												<input name="list[1].gzzh" checked="checked" value="xm" type="checkbox">
+												姓名
+												<input name="list[1].lxdh" value="姓名" type="hidden">
+											</label>
+											<label class="btn active">
+												<input name="list[2].gzzh" checked="checked" value="xb" type="checkbox">
+												性别
+												<input name="list[2].lxdh" value="性别" type="hidden">
+											</label>
+											<label class="btn active">
+												<input name="list[3].gzzh" checked="checked" value="csrq" type="checkbox">
+												出生日期
+												<input name="list[3].lxdh" value="出生日期" type="hidden">
+											</label>
+											<label class="btn active">
+												<input name="list[4].gzzh" checked="checked" value="lxdh" type="checkbox">联系电话
+												<input name="list[4].lxdh" value="联系电话" type="hidden">
+											</label>
+											<label class="btn active">
+												<input name="list[6].gzzh" checked="checked" value="mzb.name" type="checkbox">
+												民族
+												<input name="list[6].lxdh" value="民族" type="hidden">
+											</label>
+											<label class="btn active">
+												<input name="list[10].gzzh" checked="checked" value="jg" type="checkbox">
+												籍贯
+												<input name="list[10].lxdh" value="籍贯" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[5].gzzh" value="dwb.name" type="checkbox">
+												原工作单位
+												<input name="list[5].lxdh" value="原工作单位" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[7].gzzh" value="zwb.name" type="checkbox">
+												职务
+												<input name="list[7].lxdh" value="职务" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[8].gzzh" value="zjb.name" type="checkbox">
+												职级
+												<input name="list[8].lxdh" value="职级" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[9].gzzh" value="lxb.name" type="checkbox">
+												类型
+												<input name="list[9].lxdh" value="类型" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[11].gzzh" value="zzmm.name" type="checkbox">
+												政治面貌
+												<input name="list[11].lxdh" value="政治面貌" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[12].gzzh" value="fyzk" type="checkbox">
+												婚姻状况
+												<input name="list[12].lxdh" value="婚姻状况" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[13].gzzh" value="grxl" type="checkbox">
+												学历
+												<input name="list[13].lxdh" value="学历" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[14].gzzh" value="grxw" type="checkbox">
+												学位
+												<input name="list[14].lxdh" value="学位" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[15].gzzh" value="sfdj" type="checkbox">
+												是否独居
+												<input name="list[15].lxdh" value="是否独居" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[16].gzzh" value="sfgg" type="checkbox">
+												是否孤寡
+												<input name="list[16].lxdh" value="是否孤寡" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[17].gzzh" value="sfgg" type="checkbox">
+												是否失能
+												<input name="list[17].lxdh" value="是否失能" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[18].gzzh" value="qq" type="checkbox">
+												QQ号
+												<input name="list[18].lxdh" value="QQ号" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[19].gzzh" value="weix" type="checkbox">
+												微信
+												<input name="list[19].lxdh" value="微信" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[20].gzzh" value="email" type="checkbox">
+												邮箱
+												<input name="list[20].lxdh" value="邮箱" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[21].gzzh" value="gzsj" type="checkbox">
+												参加工作时间
+												<input name="list[21].lxdh" value="参加工作时间" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[22].gzzh" value="lxsj" type="checkbox">
+												退休时间
+												<input name="list[22].lxdh" value="退休时间" type="hidden">
+											</label>
+											<label class="btn">
+												<input name="list[23].gzzh" value="xsdy" type="checkbox">
+												现享受待遇
+												<input name="list[23].lxdh" value="现享受待遇" type="hidden">
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	<div class="modal-footer">
+		<button class="btn blue mgr10 expdata" data-dismiss="modal" aria-hidden="true">导出</button>
+		<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+	</div>
+<script>
+	$(function(){
+		$('.expdata').click(function(){
+			//alert("导出成功！！！");
+			//var frm = document.getElementById('frm');
+			//frm.action = "${request.contextPath}/account/UserExport";
+			//frm.submit();
+			$('#frm').attr('action','${request.contextPath}/retment/export').submit();
+		});
+	});
+</script>

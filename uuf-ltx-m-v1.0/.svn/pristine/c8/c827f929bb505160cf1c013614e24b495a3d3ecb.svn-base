@@ -1,0 +1,46 @@
+#main,#main2,#main3,#main4,#main5,#main6,#main7,#main8,#main9
+,#main10,#main11,#main12,#main13,#main14,#main15,#yuan1,#yuan2,#yuan3,#yuanboth{
+    height: 240px;
+}
+.mt20{
+    margin-top: 20px;
+}
+.xiuboth{
+    text-align: center;
+    width: 100%;
+    height: 40px;
+}
+.lixiu{
+    width: 0px;
+    float: left;
+    height: 40px;
+    background-color: white;
+}
+.tuixiu{
+    width: 0px;
+    float: left;
+    height: 40px;
+    background-color: white;
+}
+@font-face {
+    font-family: people;
+    src: url('fonts/iconfont.eot'); /* IE9*/
+    src: url('fonts/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('fonts/iconfont.woff') format('woff'), /* chrome、firefox */
+    url('fonts/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url('fonts/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+.p1,.p2{
+    font-size: 18px;
+    
+}
+.span1{
+    font-size: 18px;
+    font-family: people;
+    color: #009cf3;
+}
+.span2{
+    font-size: 18px;
+    font-family: people;
+    color: #f7888f;
+}

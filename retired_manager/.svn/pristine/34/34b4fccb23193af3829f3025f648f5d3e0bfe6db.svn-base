@@ -1,0 +1,121 @@
+@charset "utf-8";
+a {
+    cursor: pointer;
+}
+.search_box {
+	background-color:white;
+    border: 1px solid #b5b5b5;
+    width: 30%;
+    min-width: 257px;
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    overflow: hidden;
+}
+.search_top {
+    padding: 0 10px 1px;
+    background-color: #fff;
+}
+.search_condition {
+    border-bottom: 1px solid #EAECEB;
+}
+.search_condition li {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 7px;
+    margin-right: 20px;
+    border-bottom: 2px solid transparent;
+    float: left;
+}
+.search_condition li.current {
+    border-bottom: 2px solid #F6B654;
+}
+.search_top .input {
+    margin: 7px 5px;
+}
+.search_top .input input {
+    border: 1px solid #EAECEB;
+    width: 70%;
+    height: 25px;
+    line-height: 20px;
+    padding-left: 10px;
+    color: #C4C4C2;
+    border-radius: 3px;
+}
+.search_top .input span {
+    width: 15px;
+    height: 15px;
+    background: url("../../../ROOT/img/map/delete.png") center no-repeat;
+    background-size: 100%;
+    border-radius: 50%;
+    position: absolute;
+    top: 47px;
+    right: 30%;
+    cursor: pointer;
+}
+.search_top .input a {
+    display: inline-block;
+    width: 18%;
+    margin-left: 4%;
+    height: 27px;
+    line-height: 27px;
+    background-color: #F6B654;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+}
+.search_bottom {
+    margin-top: 7px;
+    padding: 7px 0;
+    background-color: #fff;
+}
+.search_bottom h6 {
+    font-size: 14px;
+    padding: 0 10px;
+    color: #333333;
+}
+.search_bottom h6  span {
+    color: #F6B654;
+    height: 35px;
+    line-height: 35px;
+}
+.search_results li {
+    border-bottom: 1px solid #EAECEB;
+    font-size: 12px;
+    line-height: 18px;
+    padding: 5px 0;
+    overflow: hidden;
+    height: 70px;
+    cursor: pointer;
+}
+.search_results li.current_li {
+    background-color: #F4F9FC;
+}
+.search_results li i {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background-color: #F6B654;
+    margin-left: -19px;
+    margin-right: 13px;
+}
+.search_results li  p{
+    padding: 0 3px 0 30px;
+}
+.page {
+    border-top: 1px solid #EAECEB;
+    margin: 20px 10px 0 0;
+    width: 100px;
+    float: right;
+    line-height: 20px;
+}
+.page li {
+    float: left;
+    padding: 0 5px;
+    border-top: 2px solid transparent;
+    cursor: pointer;
+    margin-left: 5px;
+}
+.page li.page_current {
+    border-top: 2px solid #F6B654;
+}

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+	<!--  配置 bean -->
+	<bean id="helloWorld" class="com.atguigu.spring.bean.HelloWorld">
+		<property name="name" value="spring"></property>
+	</bean>
+		<!-- 通过构造方法 -->
+		<bean id="car" class="com.atguigu.spring.bean.Car">
+			<constructor-arg value="Audi" index="0"></constructor-arg>
+			<constructor-arg  index="1">
+				<value><![CDATA[Shanghai^]]></value>
+			</constructor-arg>
+			<constructor-arg value="300000" index="2"></constructor-arg>
+		</bean>
+		<bean id = "car1" class ="com.atguigu.spring.bean.Car">
+			<constructor-arg value="BMW" type="java.lang.String"></constructor-arg>
+			<constructor-arg value = "deguo" type = "java.lang.String" ></constructor-arg>
+			<constructor-arg value = "240" type = "int"></constructor-arg>
+		</bean> 
+		<bean id="person" class="com.atguigu.spring.bean.Person">
+			<property name="name" value = "Tom"></property>
+			<property name="age" value="18"></property>
+			<property name="car">
+				<bean id="car2" class="com.atguigu.spring.bean.Car">
+					<constructor-arg value="xiandai"></constructor-arg>
+					<constructor-arg value="beijin"></constructor-arg>
+					<constructor-arg value = "3000000"></constructor-arg>
+				</bean>
+			</property>
+		</bean>
+		
+		<bean id="person2" class="com.atguigu.spring.bean.Person">
+			<constructor-arg name="name" value = "Jerry" ></constructor-arg>
+			<constructor-arg name = "age" value = "24"></constructor-arg>
+			<constructor-arg name = "car" ref="car">
+			</constructor-arg>
+			<property name="car.maxSpeed" value="240"></property>
+		</bean>
+		
+		<bean id="person3" class="com.atguigu.spring.bean.collection.Person">
+			 <property name="name" value="Tonny"></property>
+			 <property name="age" value="32"></property>
+			 <property name="cars">
+			 	<list>
+			 		<ref bean="car"></ref>
+			 		<ref bean="car1"></ref>
+			 		<ref bean="car1"></ref>
+			 	</list>
+			 	
+			 </property>
+		</bean>
+		
+		<bean id="person4" class="com.atguigu.spring.bean.collection.newPerson">
+			<property name="name" value="xiaoming"></property>
+			<property name="age" value="49"></property>
+			<property name="cars">
+				<map>
+					<entry key="AA" value-ref="car"/>
+					<entry key="BB" value-ref="car1"/> 
+				</map>
+			</property>
+		</bean>
+		
+		<bean id="dataSource" class="com.atguigu.spring.bean.collection.DataSource">
+			 <property name="properties" >
+			 	<props>
+			 		<prop key="user">root</prop>
+			 		<prop key="password">1234</prop>
+			 		<prop key="jdbcUrl" >jdbc:mysql:///text</prop>
+			 		<prop key="driverClass">com.mysql.jdbc.Driver</prop>
+			 	</props>
+			 </property>
+		</bean>
+		
+		<util:list id="cars">
+			<ref bean="car"/>
+			<ref bean="car1"/>
+		</util:list>
+		
+		<bean id="person5" class="com.atguigu.spring.bean.collection.Person">
+			<property name="name" value="Bob"></property>
+			<property name="age" value="23"></property>
+			<property name="cars" ref="cars"></property>
+		</bean>
+		
+		<bean id = "person6" class="com.atguigu.spring.bean.collection.Person" p:age="30" p:name="Jack" p:cars-ref="cars">
+			
+		</bean>
+		
+</beans>
+

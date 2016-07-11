@@ -1,0 +1,116 @@
+package cn.uuf.ltxxt.system.permission.service.impl;
+
+import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Service;
+
+import cn.uuf.domain.Resource;
+import cn.uuf.domain.Role;
+import cn.uuf.ltxxt.system.permission.service.RoleService;
+import cn.uuf.support.dao.hibernate.impl.HibernateDaoSupport;
+
+/**
+ * @author <a href="waxwing819230@sina.com">lth</a>
+ * @version 2.0
+ * @date 2015-10-19
+ */
+@Service("roleService")
+public class RoleServiceImpl extends HibernateDaoSupport<Role,Long> implements RoleService{
+
+	protected Log logger = LogFactory.getLog(this.getClass());
+	
+	public List<Role> getAll() throws Exception {
+		Criteria c = getSession().createCriteria(this.getEntityClass());
+		c.addOrder(Order.asc("id"));
+		List<Role> list = c.list();
+		if(list.size() != 0){
+			for(Role r : list){
+				lazz(r);
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public Role getById(Long id)  {
+		Role r = (Role) this.getSession().load(Role.class,id);
+		lazz(r);
+		return r;
+	}
+	
+	private void lazz(Role r){
+		if(r != null){
+			Hibernate.initialize(r.getResources());
+			for(Resource s : r.getResources()){
+				Hibernate.initialize(s.getParent());
+				Hibernate.initialize(s.getChildren());
+			}
+		}
+	}
+
+	@Override
+	public List<Role> queryList(Role role, int start, int size) {
+		return this.queryByPage(buildCriteriaByEntity(role,start,size));
+	}
+
+	@Override
+	public Long getCount(Role role) {
+		Criteria criteria = getSession().createCriteria(role.getClass());
+		//可加查询条件
+		if(role != null){
+			if(role.getName()!=null && role.getName().length()>0)
+				criteria.add(Restrictions.like("name", role.getName(),MatchMode.ANYWHERE));
+			
+			//加上查询的条件
+		}
+		ProjectionList proList = Projections.projectionList();//设置投影集合
+		proList.add(Projections.property("id"));
+		criteria.setProjection(proList);
+		return this.getCount(criteria);
+	}
+
+	@Override
+	public Role queryByName(String name) throws Exception {
+		return (Role) this.findUniqueBy(Role.class,"name",name);
+	}
+	
+	private Criteria buildCriteriaByEntity(Role role,int start,int size){
+		Criteria criteria = getSession().createCriteria(role.getClass());
+		if(role != null){
+			if(role.getName()!=null && role.getName().length()>0)
+				criteria.add(Restrictions.like("name", role.getName(),MatchMode.ANYWHERE));
+			
+			//加上查询的条件
+		}
+		criteria.setFirstResult(start).setMaxResults(size);
+		criteria.addOrder(Order.asc("id"));
+		return criteria;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Role queryByScope(String scope) {
+		Role role = null;
+		try{
+			Criteria c = getSession().createCriteria(Role.class);
+			c.add(Restrictions.eq("scope",scope));
+			List<Role> list = c.list();
+			if(list.size() > 0)
+				role = list.get(0);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return role;
+	}
+
+}
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="address" class="com.atguigu.spring.bean.autowire.Address" abstract="true"
+		p:city="BeiJing" p:street="WuDaoKou"></bean>
+		
+	<bean id="address2" parent="address"
+		 p:street="Wangjiang"></bean>	
+		
+	<bean id="address3" parent="address2" p:city="Chengdu"></bean>
+	
+	<bean id="car" class="com.atguigu.spring.bean.autowire.Car"
+		p:brand="Baoma" p:price="30000000"></bean>
+		
+	<bean id="person" class="com.atguigu.spring.bean.autowire.Person"
+		p:name="Tom" p:address-ref="address3" depends-on="car"></bean>
+	
+		
+</beans>

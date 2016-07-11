@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zkxp>
+	<system name="captchaTypes" value="adminLogin,resetPassword,other" />
+	<system name="accountLockTypes" value="admin,other" />
+	<system name="accountLockCount" value="5" />
+	<system name="accountLockTime" value="10" />
+	<system name="buttonImgDir" value="resources/admin/images/button"></system>
+	<!-- 上传文件的大小 -->
+	<system name="uploadMaxSize" value="10"/>
+	<!-- 运行上传文件的后缀 -->
+	<system name="uploadFileExtension" value="zip,rar,7z,doc,docx,xls,xlsx,ppt,pptx"/>
+	<!-- 允许上传图片的后缀 -->
+	<system name="uploadImageExtension" value="jpg,jpeg,bmp,gif,png"/>
+	<!-- 允许上传的后缀 -->
+	<system name="uploadOtherExtension" value="zip,rar,7z,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,bmp,gif,png"/>
+	<!-- 图片上传的路径 -->
+	<system name="imageUploadPath" value="/upload/image"/>  
+	<!-- 文件上传的路径 -->
+	<system name="fileUploadPath" value="/upload/file"/>
+	<!-- 入校前获奖信息路径（添加学籍信息里面） -->
+	<system name="hjxxUploadPath" value="/upload/xsyyrr"/>
+	<!-- 文章图片的路径 -->
+	<system name="articleImageUrl" value=""/>
+	
+</zkxp>

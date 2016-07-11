@@ -1,0 +1,15 @@
+package cn.uuf.ltxxt.meetingRoom.service;
+
+import java.util.List;
+
+import cn.uuf.domain.meetingroom.MeetingApply;
+public interface MeetingApplyService {
+
+	public void save(MeetingApply m);
+	public void update(MeetingApply m);
+	public void delete(Long... id);
+	public MeetingApply getById(Long id);
+	public Long getCount(MeetingApply m);
+	public List<MeetingApply> queryList(MeetingApply m,int s,int size);
+	public List<MeetingApply> queryByMId(MeetingApply app);
+}

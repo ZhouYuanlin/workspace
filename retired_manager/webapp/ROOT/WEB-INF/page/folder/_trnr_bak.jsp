@@ -1,0 +1,116 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.uufocus.com/taglib" prefix="s"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+<c:forEach items="${list}" var="item" varStatus="c">
+                         <tr>
+                           <td>${c.index + 1}</td>
+                           <td>
+                               <input type="checkbox" id="id" name="id" class="checkboxes" value="${item.id}"/>
+                           </td>
+                           <td>
+                           <c:choose>
+                           	 <c:when test="${c.first}"><a href="javascript:;;" title="降" class="sortclass" ref="${item.id}" st="${list[c.index + 1].id}"><i class="fa fa-arrow-down"></i></a></c:when>
+                           	 <c:when test="${c.last}"><a href="javascript:;;" title="升" class="sortclass" ref="${item.id}" st="${list[c.index - 1].id}"><i class="fa fa-arrow-up"></i></a></c:when>
+                           	 <c:otherwise>
+                           	 	<a href="javascript:;;" title="升" class="sortclass" ref="${item.id}" st="${list[c.index - 1].id}"><i class="fa fa-arrow-up"></i></a><a href="javascript:;;" class="sortclass" title="降" ref="${item.id}" st="${list[c.index + 1].id}"><i class="fa fa-arrow-down"></i></a>
+                           	 </c:otherwise>
+                           </c:choose>
+                           </td>
+                           <td>
+                                 <c:if test="${item.fileType=='文件夹'}"><i class="fa fa-folder"></i></c:if>
+	                            	<a <c:if test="${item.fileType=='文件夹'}"> href="javascript:void(0);" class="enterfolder modify${item.id}"  ref="${item.id }"</c:if>
+	                            	<c:if test="${item.fileType=='可预览文件'}"> href="<c:url value='${request.contextPath}/folder/${item.id}/detail'/> </c:if>
+	                            	>
+	                                	<s:substring length="20" value="${item.fileName}"/>
+	                                </a>
+                           </td>
+                           <td>
+	                            <!-- 自己的文件夹 -->
+	                            <c:if test="${item.fileType=='文件夹'}">
+	                                <a title="进入文件夹" class="enterfolder" ref="${item.id }"><i class="fa fa-sign-in"></i></a>
+	                                <a title="重命名" class="rename" ref="${item.id }"><i class="fa fa-edit"></i></a>
+	      							<a title="删除该文件夹其及所有内容" data-toggle="modal" class="delete_file" ref="${item.id}" href="javascript:;;"><i class="fa fa-times-circle"></i></a>
+	      						</c:if>
+	      						<!-- 用户自己的文件 -->
+	      						<c:if test="${item.fileType!='文件夹'}">
+	      							<a href="${request.contextPath}/folder/${item.id }/download" title="下载文档"><i class="fa fa-download"></i></a>                                        
+		      						<!-- 自己可预览的文件 -->	
+		      						<c:if test="${item.fileType=='可预览文件'}">
+	                                	<a href="#showdetail"  data-toggle="modal" title="预览文档" class="showuf" ref ="${item.id}"><i class="fa fa-eye"></i></a>
+	      							</c:if>
+	      							<a title="删除该文件" href="javascript:;;"  data-toggle="modal"  class="delete_file" ref="${item.id }"><i class="fa fa-times-circle"></i></a>
+      							</c:if>
+                           </td>
+                           <td>${item.user.xm}</td>
+                           <td><fmt:formatDate value="${item.createDate}" pattern="yyyy-MM-dd"/></td>
+                       </tr>
+                       </c:forEach>
+                       <c:if test="${empty list}"><tr><td colspan="14">没有数据！</td></tr></c:if>
+                       
+   <script>
+   	$(function(){
+   		//升
+   		$('.sortclass').click(function(){
+   			$('#frm').attr("action","/folder/"+$(this).attr('ref')+"/"+$(this).attr('st')+"/sort").submit();
+   		});
+   		$(".enterfolder").click(function(){
+   			$("#pid").val($(this).attr("ref"));
+   			$("#frm").attr("action","/folder").submit();
+   		});
+   		$('.rename').click(function(){
+   			var i = $(this).attr('ref');
+   			var v = $('.modify'+i).text();
+   			$('.modify'+i).text("").unbind('click');
+   			var html="";
+   			html+='<span>';
+			html+='<input style="display:block;float:left;margin-top:-4px;" id="rename_sub_val'+i+'" type="text" value="'+$.trim(v)+'"/>';
+			html+='<span style="display:block;float:left; opacity:0.5;margin-left:20px;margin-top:4px;" class="confirm_rename">';
+			html+='<i class="fa fa-check-circle" id="rename_sub'+i+'"></i></span>';
+            html+='<span  style="display:block;float:left; opacity:0.5;margin-left:20px;margin-top:4px;" class="cancle_rename">';
+			html+='<i class="fa fa-times-circle"></i></span>';
+			html+='</span>';
+   			$('.modify'+i).prepend(html);
+   			//取消重命名文件夹
+			$(".cancle_rename").click(function(){
+				$('.modify'+i).text(v).bind('dblclick',function(){
+					$("#pid").val($(this).attr("ref"));
+		   			$("#frm").attr("action","/folder").submit();
+				});
+			});
+			//重命名文件夹提交
+			$(".confirm_rename").click(function(){
+				var sub_val=$("#rename_sub_val"+i).val();
+				if($.trim(sub_val)==""){
+					alert("文件名不能为空");
+					return;
+				}
+				$.post("/folder/ajaxrename?"+new Date().getTime(),{sub_val:sub_val,ref:i},function(data){
+					if(data!=null){
+						$('.modify'+i).text(sub_val);
+						$('.modify'+i).text(sub_val).bind('dblclick',function(){
+							$("#pid").val($(this).attr("ref"));
+				   			$("#frm").attr("action","/folder").submit();
+						});
+					}
+				});
+			});
+   		});
+   	//删除文件
+		$('.delete_file').click(function(){
+   			var id = $(this).attr('ref');
+   			var v = $(this).attr('title');
+   			if(confirm("您确定要" + v)){
+   				$("#frm").attr("action","/folder/delete?id=" + id).submit();
+   			}
+   		});
+   		$('.showuf').click(function(){
+   			var id = $(this).attr("ref");
+   			$.post('/folder/ajaxdetail?'+new Date().getTime(),{"id":id},function(d){
+				$("#showread").html(d);
+			});
+   		});
+   	});
+   </script>

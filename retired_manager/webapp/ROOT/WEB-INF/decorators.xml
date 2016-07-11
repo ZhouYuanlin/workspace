@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/defaults/layouts">
+	<excludes>
+		<pattern>/auth/*</pattern>
+		<pattern>/*/ajax*</pattern>
+		<pattern>/*/advan*</pattern>
+		<pattern>/imageUpload*</pattern>
+		<pattern>/*/noschma*</pattern>
+    </excludes>
+   
+    <decorator name="main" page="main.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+    
+</decorators>

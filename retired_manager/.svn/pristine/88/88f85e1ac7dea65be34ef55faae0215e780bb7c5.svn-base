@@ -1,0 +1,10 @@
+﻿@charset "utf-8";
+/* pagination */
+#searchResultPanel .pagination{ font-size:10px;} 
+.pagination a{text-decoration:none;border:solid 1px #AAE;color:#15B;}
+.pagination a, .pagination span{display:inline-block;float:left;padding:2px 2px;margin-right:4px;}
+.pagination .current{background:#26B;color:#fff;border:solid 1px #AAE;}
+.pagination .current.prev, .pagination .current.next{color:#999;border-color:#999;background:#fff;}
+
+/*结果面板*/
+#searchResultPanel div{ height:60px;width:300px; lin-height:20px; font-size:15px;overflow:auto;ee}

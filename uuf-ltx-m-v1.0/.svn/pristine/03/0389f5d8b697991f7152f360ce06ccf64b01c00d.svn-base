@@ -1,0 +1,69 @@
+package cn.uuf.wechat.common.controller;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.collections.CollectionUtils;
+
+import cn.uuf.domain.Account;
+import cn.uuf.domain.Role;
+import cn.uuf.stu.entity.wx.WAccountAssociation;
+import cn.uuf.stu.framework.service.IAccountService;
+import cn.uuf.wechat.connect.service.ILtxAccountService;
+import cn.uuf.wechat.connect.service.IWAccountAsscociationService;
+
+public class WxBaseController {
+	
+	/**
+	 * ltx账号service
+	 */
+	@Resource
+	private ILtxAccountService ltxAccountService;
+	
+	
+	/**
+	 * 微信账号openid关联service
+	 */
+	@Resource
+	private IWAccountAsscociationService asscociationService;
+	
+	/**
+	 * 账号相关
+	 */
+	@Resource
+	private IAccountService accountService;
+	
+	/**
+	 * 获取到当前openid关联的用户
+	 * @return
+	 */
+	protected String getUserName(String openId) {
+		
+		//获取到微信当前登录账号的实体
+		WAccountAssociation wAccountAssociation = asscociationService.getUniqueEntity("openId", openId);
+		//通过用户username(身份证号)获取到该对象实体
+		List<Account> account = ltxAccountService.getAccount(wAccountAssociation);
+		return account.get(0).getUsername();
+	}
+	
+	/**
+	 * 取得当前用户拥有的角色可访问的用户信息
+	 * @return
+	 */
+	public String hasRoleScope(String openId){
+		//获取到微信当前登录账号的实体
+				WAccountAssociation wAccountAssociation = asscociationService.getUniqueEntity("openId", openId);
+				//通过用户username(身份证号)获取到该对象实体
+				if(wAccountAssociation!=null){
+					List<Account> account = ltxAccountService.getAccount(wAccountAssociation);
+					List<Role> roles = account.get(0).getRoles();
+					if(CollectionUtils.isNotEmpty(roles)){
+						return roles.get(0).getScope();
+					}
+				}
+				return null;
+	}
+	
+	
+}

@@ -1,0 +1,191 @@
+package cn.uuf.ltxxt.car.controller;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import cn.uuf.contants.Constants;
+import cn.uuf.domain.Account;
+import cn.uuf.domain.Role;
+import cn.uuf.domain.User;
+import cn.uuf.domain.car.Carapply;
+import cn.uuf.domain.car.Carinfo;
+import cn.uuf.ltxxt.car.service.CarApplyService;
+import cn.uuf.ltxxt.car.service.CarInfoService;
+import cn.uuf.ltxxt.car.service.UseService;
+import cn.uuf.ltxxt.login.controller.BaseController;
+import cn.uuf.ltxxt.system.permission.service.AccountService;
+import cn.uuf.ltxxt.system.permission.service.RoleService;
+import cn.uuf.util.Paginate;
+
+/**
+ * 车辆管理
+ * @author fc
+ * @version 1.0
+ * @date 2016-5-12 11:34:22
+ */
+@Controller
+@RequestMapping("/carInfo")
+public class CarInfoAction extends BaseController{
+	private final String CAR_MANAGER = "车辆管理员";
+	private final String LIST_ACTION = "redirect:/carInfo";
+	@Autowired
+	private CarInfoService carService;
+	
+	@Autowired
+	private CarApplyService carApplyService;
+	
+	@Autowired
+	private UseService useService;
+	
+	@Resource
+	private RoleService roleService;
+	
+	@Resource
+	private AccountService accountService;
+	
+	@RequestMapping
+	public ModelAndView index(Integer page,Carinfo ci){
+		ModelAndView mav = new ModelAndView("car/carinfo/index");
+		try{
+			//获取车辆信息分页list
+			page = page == null || page < 0 ? 1 : page;
+			int startnum =(page - 1) * size;
+			List<Carinfo> list = carService.queryList(ci, startnum, size);
+			//获取车辆信息总数量
+			Long count = carService.getCount(ci);
+			paginate = new Paginate(list,count,size,page);//获取页面page对象
+			mav.addObject("paginate", paginate);
+			mav.addObject("list", list);
+			mav.addObject("ci", ci);
+		}catch(Exception e){
+			e.printStackTrace();
+			mav.addObject(Constants.MESSAGE_NAME, "未找到数据");
+		}
+		return mav;
+	}
+	
+	//跳转添加页面
+	@RequestMapping("/create")
+	public ModelAndView create(){
+		ModelAndView mav = new ModelAndView("car/carinfo/create");
+		  getCodeInf(mav);
+		try {
+			Object[] obj = null;
+			List<Account> alist=new ArrayList<Account>();
+			Role role;
+			role = roleService.queryByName(CAR_MANAGER);
+			String sql="SELECT * from UF_ACCOUNT_ROLES where ROLE_ID="+role.getId();
+			List roleList1= roleService.queryBySql(sql);
+			for(int i = 0 ;i < roleList1.size(); i++){
+				obj = (Object[]) roleList1.get(i);
+				String aid = obj[0].toString();
+				Long ss=Long.valueOf(aid);
+				Account ac=accountService.getById(ss);
+				alist.add(ac);
+			}
+			mav.addObject("alist", alist);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mav;
+	}
+	
+	//车辆sava方法
+	@RequestMapping(value="/save")
+	public ModelAndView save(HttpServletRequest request,String sfzh,@Valid Carinfo ci,BindingResult res,RedirectAttributes red){
+		//添加车辆信息
+		try{
+			Date time=new Date();
+			SimpleDateFormat fmat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String date=fmat.format(time);
+			ci.setCreateDate(date);
+			ci.setUpdateDate(date);
+			carService.save(ci);
+			red.addFlashAttribute(Constants.MESSAGE_NAME,"添加成功");
+		}catch(Exception e){
+			e.printStackTrace();
+			red.addFlashAttribute(Constants.MESSAGE_NAME,"添加失败");
+		}
+		return new ModelAndView(LIST_ACTION);
+	}
+	
+	//删除车辆
+	@RequestMapping("/delete")
+	public ModelAndView delete(HttpServletRequest request,RedirectAttributes red,Long... id){
+		try{
+			for (Long cid:id) {
+				Carapply capply=new Carapply();
+				capply.setCarinfo(carService.getById(cid));
+				List<Carapply> carapplies=carApplyService.queryByCid(capply);
+				for (Carapply carapply : carapplies) {
+					Long applyid=carapply.getId();
+					carApplyService.delete(applyid);
+				}
+				
+			}
+			carService.delete(id);
+			red.addFlashAttribute(Constants.MESSAGE_NAME,"删除成功");
+		}catch(Exception e){
+			red.addFlashAttribute(Constants.MESSAGE_NAME,"删除失败");
+		}
+		return new ModelAndView(LIST_ACTION);
+	}
+	
+	//修改车辆信息页面加载
+	@RequestMapping("/{id}/edit")
+	public ModelAndView edit(@PathVariable Long id){
+		ModelAndView mav = new ModelAndView("car/carinfo/update");
+		try{
+			//获取车辆审批人信息
+			Object[] obj = null;
+			List<Account> alist=new ArrayList<Account>();
+			Role role;
+			role = roleService.queryByName(CAR_MANAGER);
+			String sql="SELECT * from UF_ACCOUNT_ROLES where ROLE_ID="+role.getId();
+			List roleList1= roleService.queryBySql(sql);
+			for(int i = 0 ;i < roleList1.size(); i++){
+				obj = (Object[]) roleList1.get(i);
+				String aid = obj[0].toString();
+				Long ss=Long.valueOf(aid);
+				Account ac=accountService.getById(ss);
+				alist.add(ac);
+			}
+			mav.addObject("alist", alist);
+			mav.addObject("r",carService.getById(id));
+		}catch(Exception e){
+		}
+		return mav;
+	}
+	
+	//修改车辆信息
+	@RequestMapping(value="/update")
+	public ModelAndView update(HttpServletRequest request,@Valid Carinfo ci,BindingResult res,RedirectAttributes red){
+		try{
+			Date time=new Date();
+			SimpleDateFormat fmat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String date=fmat.format(time);
+			ci.setUpdateDate(date);
+			carService.update(ci);
+			red.addFlashAttribute(Constants.MESSAGE_NAME,"修改成功");
+		}catch(Exception e){
+			e.printStackTrace();
+			red.addFlashAttribute(Constants.MESSAGE_NAME,"修改失败");
+		}
+		return new ModelAndView(LIST_ACTION);
+	}
+}
+

@@ -1,0 +1,5 @@
+username.not.empty=\u7528\u6237\u540D\u4E0D\u80FD\u4E3A\u7A7A\uFF01
+at.least.one=\u81F3\u5C11\u9009\u4E2D\u4E00\u9879!
+
+associate.constraint.deleteExistNotAllowed={0}\u6709\u5173\u8054\u7684{1}\u4E0D\u80FD\u5220\u9664!
+delete.fail=\u5220\u9664\u5931\u8D25{0}!

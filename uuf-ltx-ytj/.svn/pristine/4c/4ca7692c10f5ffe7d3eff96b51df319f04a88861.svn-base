@@ -1,0 +1,24 @@
+package cn.uuf.stu.ltx.index.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import cn.uuf.stu.framework.controller.BaseController;
+
+/**
+ * 首页
+* <p>标题：IndexController</p>
+* <p>简介：</p>
+* @author tl
+* @date 2016年6月8日 下午2:49:20
+ */
+@Controller
+@RequestMapping(value="/ytj/index")
+public class IndexController extends BaseController {
+	
+	@RequestMapping
+	public String index(){
+		return "/ltx/index/index";
+	}
+	
+}

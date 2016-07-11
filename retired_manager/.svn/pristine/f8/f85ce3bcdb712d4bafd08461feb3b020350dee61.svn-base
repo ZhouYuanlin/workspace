@@ -1,0 +1,100 @@
+package cn.uuf.ltxxt.asset.service.impl;
+
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Service;
+
+import cn.uuf.contants.Constants;
+import cn.uuf.domain.asset.AssetManage;
+import cn.uuf.ltxxt.asset.service.AssetManageService;
+import cn.uuf.support.dao.hibernate.impl.HibernateDaoSupport;
+
+@Service
+public class AssetManageServiceImpl extends HibernateDaoSupport<AssetManage, Long> implements AssetManageService{
+	@Override
+	public Long getCount(AssetManage m) {
+		Criteria criteria = buildCondition(m);
+		ProjectionList proList = Projections.projectionList();//设置投影集合
+		proList.add(Projections.property("id"));
+		criteria.setProjection(proList);
+		return this.getCount(criteria);
+	}
+
+	@Override
+	public List<AssetManage> queryList(AssetManage m, int s, int size) {
+		Criteria c = buildCondition(m);
+		c.setFirstResult(s).setMaxResults(size);
+		return c.list();
+	}
+	private Criteria buildCondition(AssetManage m){
+		Criteria c = getSession().createCriteria(AssetManage.class);
+		if(m != null){
+			if(m.getName() != null && m.getName().length() > 0)
+				c.add(Restrictions.like("name",m.getName(),MatchMode.ANYWHERE));
+			if(m.getVersion() != null && m.getVersion().length() > 0)
+				c.add(Restrictions.like("version",m.getVersion(),MatchMode.ANYWHERE));
+			if(m.getPurchaseDate() != null && m.getPurchaseDate().length() > 0)
+				c.add(Restrictions.like("purchaseDate",m.getPurchaseDate(),MatchMode.ANYWHERE));
+		}
+		return c;
+	}
+
+	@Override
+	public List<AssetManage> getAll() {
+		AssetManage p = new AssetManage();
+		p.setSfsc(Constants.HASNO);
+		Criteria c = buildCondition(p);
+		List<AssetManage> list = c.list();
+		for(AssetManage t : list){
+			Hibernate.initialize(t.getName());
+		}
+		return list;
+	}
+
+	@Override
+	public String fmtLong(Long val, int size){
+	        StringBuilder sb = new StringBuilder("");
+	        sb.append(val);
+	        if (sb.length() < size){
+	            int cnt = size - sb.length();
+	            for (int i = 0; i < cnt; i++){
+	                sb.insert(0, "0");
+	            }
+	            return sb.toString();
+	        }else if (sb.length() > size){
+	            return sb.substring(sb.length() - size, size);
+	        }else{
+	            return sb.toString();
+	        }
+	}
+
+
+	public List queryBySql(String sql) throws Exception {
+		List list = getSession().createSQLQuery(sql).list();
+		return list;
+	}
+	@Override
+	public void updateHQL(String sql) {
+		getSession().createSQLQuery(sql).executeUpdate();
+		
+	}
+	@Override
+	 public List<AssetManage> findByCriteria(AssetManage am)throws Exception{
+		  Session session = getSession();
+		  DetachedCriteria dc = DetachedCriteria.forClass(AssetManage.class);
+		  dc.add(Restrictions.eq("name", am.getName()));
+		  dc.add(Restrictions.eq("version",am.getVersion()));
+		  dc.add(Restrictions.eq("purchaseDate",am.getPurchaseDate()));
+		  Criteria cri = dc.getExecutableCriteria(session);
+		  List<AssetManage> list = cri.list();
+		  return list;
+		 }
+}

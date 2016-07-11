@@ -1,0 +1,154 @@
+/*清除浏览器默认样式*/
+body{padding:0;margin:0;font-size:12px;font-family:Arial, "微软雅黑";}
+h1,h2,h3,h4,h5,h6,ul,li,p,dl,dt,dd,img{ padding:0; margin:0; list-style:none; border:0; }
+.contR{
+		border: 1px solid #ccc;
+		margin-bottom: 15px;
+		margin-left: 0!important;
+	}
+.qx1{
+	padding: 0 10px;
+	height: 28px;
+	line-height: 28px;
+	border-bottom: 1px solid #ccc;
+	color: #323232;
+	
+}
+.contR .left,.contR .right{
+	float: left;
+}
+.contR .qx1 .left{
+	margin: 8px 10px 0 0;
+}
+.contR .qx1 .right{
+	line-height: 28px;
+}
+.contR .one{
+	font-size: 16px;
+	font-weight: bold;
+}
+.qx2{
+	margin: 0!important;
+	padding: 0 10px;
+	line-height: 20px;
+	
+}
+.erji{
+	color: #003366;
+	font-size: 14px;
+	line-height: 30px;
+	padding: 5px 0 0 0;
+	border-bottom:1px dashed #ccc!important;
+}
+.sanji{
+	margin-right: 25px!important;
+	overflow: hidden;
+	float: left;
+	padding: 5px 0 0 0;
+}
+.sj-right{
+	border-left: 1px solid #CCCCCC;
+	margin: 0!important;
+	padding: 0 20px;
+	border-bottom:1px dashed #ccc!important;
+}
+.qx2-bg{
+	background: #f1f1f1;
+}
+.Btn{
+	margin-left: 35%!important;
+}
+.btn01,.btn02{
+	padding: 0 35px;
+	border: 0;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	color: #FFFFFF;
+	background: #003366;
+	font-size: 16px;
+}
+.btn01{
+	margin-right: 25px;
+}
+.sliderL{
+	border: 1px solid #ccc;
+	padding: 10px;
+	
+}
+.sliderL .title{
+	height: 38px;
+	border: 1px solid #ccc;
+	line-height: 39px;
+	background: url(../images/qx01.png) no-repeat 10px center #FAFAFA;
+	padding: 0 30px;
+	font-size: 14px;
+}
+.sliderL strong{
+	display: block;
+	width: 100%;
+	font-weight: normal;
+}
+.sliderL ul li a{
+	display: block;
+	width: 100%;
+	cursor: pointer;
+	color:#646464;
+}
+.sliderL ul li a:hover,.sliderL ul li alink,.sliderL ul li a:visited{
+	text-decoration:none;
+}
+
+.sliderL ul li{
+	padding-left:30px;
+}
+.sliderL ul li:hover{
+	background:#eee;
+}
+.sliderL ul .cur:link,.sliderL ul .cur:hover,.sliderL ul .cur:visited{
+	background:#0362FD;
+	color:#fff;
+}
+.sliderL ul .cur a{
+	color:#fff;
+}
+.sliderL ul .cur{
+	background:#0362FD;
+	color:#fff;
+}
+.sliderL strong{
+	cursor: pointer;
+	font-weight: normal;
+}
+.sliderL ul .more{
+	margin-top: 10px;
+}
+.sliderL span{
+	cursor: pointer;
+}
+.sliderL ul{
+	padding: 0;
+	font-size: 14px;
+	color: #646464;
+}
+.sliderL ul li{
+	line-height: 30px;
+}
+.sliderL ul li ol li{
+	line-height: 20px;
+	height: 20px;
+}
+.sliderL ul li ol li:hover{
+	background: #003366;
+	color: #fff;
+}
+.sliderL ul ol{
+	cursor:pointer;
+}
+/*.sliderL .current{
+	background: url(../img/qx03.png) no-repeat right center;
+}*/
+
+
+
+

@@ -1,0 +1,62 @@
+package cn.uuf.ltxxt.meetingRoom.service.impl;
+
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Service;
+
+import cn.uuf.contants.Constants;
+import cn.uuf.domain.meetingroom.MeetingRoom;
+import cn.uuf.ltxxt.meetingRoom.service.MeetingRoomService;
+import cn.uuf.support.dao.hibernate.impl.HibernateDaoSupport;
+
+@Service
+public class MeetingRoomServiceImpl extends HibernateDaoSupport<MeetingRoom, Long> implements MeetingRoomService{
+
+	@Override
+	public Long getCount(MeetingRoom m) {
+		Criteria criteria = buildCondition(m);
+		ProjectionList proList = Projections.projectionList();//设置投影集合
+		proList.add(Projections.property("id"));
+		criteria.setProjection(proList);
+		return this.getCount(criteria);
+	}
+
+	@Override
+	public List<MeetingRoom> queryList(MeetingRoom m, int s, int size) {
+		Criteria c = buildCondition(m);
+		c.setFirstResult(s).setMaxResults(size);
+		return c.list();
+	}
+	private Criteria buildCondition(MeetingRoom m){
+		Criteria c = getSession().createCriteria(MeetingRoom.class);
+		if(m != null){
+			if(m.getName() != null && m.getName().length() > 0)
+				c.add(Restrictions.like("name",m.getName(),MatchMode.ANYWHERE));
+			if(m.getAddress() !=null && m.getAddress().length()>0)
+				c.add(Restrictions.eq("address",m.getAddress()));
+		}
+		c.addOrder(Order.desc("updateDate"));
+		return c;
+	}
+
+	@Override
+	public List<MeetingRoom> getAll() {
+		MeetingRoom p = new MeetingRoom();
+		p.setSfsc(Constants.HASNO);
+		Criteria c = buildCondition(p);
+		List<MeetingRoom> list = c.list();
+		for(MeetingRoom t : list){
+			Hibernate.initialize(t.getName());
+		}
+		return list;
+	}
+	
+
+}

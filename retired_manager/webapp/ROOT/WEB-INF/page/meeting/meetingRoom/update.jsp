@@ -1,0 +1,262 @@
+<%@page import="cn.uuf.contants.Constants"%>
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://www.uufocus.com/taglib" prefix="s"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="xxs" tagdir="/WEB-INF/tags" %>
+<html>
+<body>
+	<link rel="stylesheet"
+		href="${request.contextPath}/defaults/js/kindeditor/themes/default/default.css" />
+	<link rel="stylesheet"
+		href="${request.contextPath}/defaults/js/kindeditor/plugins/code/prettify.css" />
+	<script charset="utf-8"
+		src="${request.contextPath}/defaults/js/kindeditor/kindeditor.js"></script>
+	<script charset="utf-8"
+		src="${request.contextPath}/defaults/js/kindeditor/lang/zh_CN.js"></script>
+	<script charset="utf-8"
+		src="${request.contextPath}/defaults/js/kindeditor/plugins/code/prettify.js"></script>
+	<div class="page-content-wrapper">
+		<div class="page-content">
+			<div class="row">
+				<div class="col-md-12">
+					<ul class="page-breadcrumb breadcrumb">
+						<li><i class="fa fa-home"></i> <a
+							href="${request.contextPath}/meetingRoom/getList"> 首页 </a> <i
+							class="fa fa-angle-right"></i></li>
+						<li><a href="${request.contextPath}/meetingRoom/getList">
+								会议室管理 </a> <i class="fa fa-angle-right"></i></li>
+						<li><a href="${request.contextPath}/meetingRoom/getList">
+								修改 </a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="portlet box grey">
+						<div class="portlet-title">
+							<div class="caption">信息修改</div>
+							<div class="tools">
+								<a href="javascript:;" class="collapse"> </a>
+							</div>
+						</div>
+						<div class="portlet-body form">
+							<form id="frm"  
+								action="<c:url value='${request.contextPath}/meetingRoom/update' />"
+								class="form-horizontal" method="post">
+								<input type="hidden" name="id" value="${meeting.id}" />
+								<input type="hidden" name="updateDate" value="${meeting.updateDate}" />
+								<input type="hidden" name="createDate" value="${meeting.createDate}" />
+								<div class="form-body">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label"><i
+													style="color: red; margin-right: 5px;">*</i>名称：</label>
+												<div class="controls">
+													<input type="text" id="name" name="name"
+														value="${meeting.name}" class="form-control col-md-12" />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label"><i
+													style="color: red; margin-right: 5px;">*</i>使用设备：</label>
+												<div class="controls">
+													<input type="text" id="device" name="device"
+														value="${meeting.device}" class="form-control col-md-12" />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label"><i
+													style="color: red; margin-right: 5px;">*</i>地址：</label>
+												<div class="controls">
+													<input type="text" id="address" name="address"
+														value="${meeting.address}" class="form-control col-md-12" />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label"><i
+													style="color: red; margin-right: 5px;">*</i>面积：</label>
+												<div class="controls">
+													<input type="text" id="area" name="area"
+														value="${meeting.area}" class="form-control col-md-12" />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label"><i
+													style="color: red; margin-right: 5px;">*</i>最大使用人数：</label>
+												<div class="controls">
+													<input type="text" id="upperLimit" name="upperLimit"
+														value="${meeting.upperLimit}"
+														class="form-control col-md-12" />
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label">使用状态：</label>
+												<div class="controls">
+													<select name="enableState" class="form-control col-md-12">
+														<option value="1"
+															<c:if test="${meeting.enableState == 1}">selected</c:if>>启用</option>
+														<option value="2"
+															<c:if test="${meeting.enableState == 2}">selected</c:if>>禁用</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label"><i
+													style="color: red; margin-right: 5px;">*</i>会议室管理员：</label>
+												<div class="controls">
+													<select name="ac.id"  id="acid" class="form-control col-md-12" >
+										                            <option value="">----请选择----</option>
+												             		<c:forEach items="${alist}" var="item">
+												             			<option value="${item.id}"<c:if test="${meeting.ac.id == item.id}">selected</c:if>>${item.realname}</option>
+												             		</c:forEach>
+												             	</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label class="control-label"><i
+													style="color: red; margin-right: 5px;">*</i>描述：</label>
+												<div class="controls">
+													<input type="text" id="description" name="description"
+														value="${meeting.description}"
+														class="form-control col-md-12" />
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="control-label">会议室布局图：</label>
+												<div class="controls" id="siteWebLog">
+													<input type="hidden" id="siteWebLogName" value="imgurl" />
+													<xxs:commonupload id="siteWebLog" uploadType="1" type="1"
+														name="imgurl" fileTypes="*.jpg;*.gif;*.png"
+														sizeLimit="10 MB" srcImg="${meeting.imgurl}"
+														showText="true" styleClass="text_4" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-actions fluid">
+									<div class="row">
+										<div class="col-md-12">
+											<div class="col-md-offset-5">
+												<button type="submit" class="btn blue mgr10 wzbtn">
+													提交</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	$(function(){
+		$('.wzbtn').click(function(){
+			if($('#name').val() == ""){
+				alert("请输入会议室名称");
+				$('#name').focus();
+				return false;
+			}
+			if($('#device').val() == ""){
+				alert("请输入设备名");
+				$('#device').focus();
+				return false;
+			}
+			if($('#address').val() == ""){
+				alert("请输入地址");
+				$('#address').focus();
+				return false;
+			}
+			if($('#area').val() == ""){
+				alert("请输入面积");
+				$('#area').focus();
+				return false;
+			}
+			if($('#upperLimit').val() == ""){
+				alert("请输入最大人数");
+				$('#upperLimit').focus();
+				return false;
+			}
+			if($('#acid').val() == ""){
+				alert("请输入会议室管理员");
+				$('#acid').focus();
+				return false;
+			}
+			if($('#description').val() == ""){
+				alert("请输入会议室描述");
+				$('#description').focus();
+				return false;
+			}
+			$('#frm').submit();
+		});
+	}); 
+		KindEditor
+				.ready(function(K) {
+					var editor1 = K
+							.create(
+									'textarea[id="description"]',
+									{
+										cssPath : '${request.contextPath}/defaults/js/kindeditor/plugins/code/prettify.css',
+										uploadJson : '${request.contextPath}/retirenotice/ajaxupload',//上传图片时用
+										allowUpload : true,
+										urlType : 'absolute',
+										items : [ //配置工具栏
+										'fontname', 'fontsize', '|',
+												'forecolor', 'hilitecolor',
+												'bold', 'italic', 'underline',
+												'removeformat', '|',
+												'justifyleft', 'justifycenter',
+												'justifyright',
+												'insertorderedlist',
+												'insertunorderedlist', '|',
+												'emoticons', 'link',
+												'wordpaste' ],
+
+										afterCreate : function() {
+											var self = this;
+											K.ctrl(document, 13, function() {
+												self.sync();
+											});
+											K.ctrl(self.edit.doc, 13,
+													function() {
+														self.sync();
+													});
+										}
+									});
+					prettyPrint();
+
+				});
+	</script>
+</body>
+</html>
+<%!String htmlspecialchars(String str) {
+		str = str.replaceAll("&", "&amp;");
+		str = str.replaceAll("<", "&lt;");
+		str = str.replaceAll(">", "&gt;");
+		str = str.replaceAll("\"", "&quot;");
+		return str;
+	}%>

@@ -1,0 +1,5 @@
+ package com.atguigu.spring.bean.cycle;
+
+public class MyBeanPostProcessor {
+
+}
